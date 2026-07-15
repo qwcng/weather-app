@@ -18,9 +18,29 @@ class WeatherController extends Controller
     {
         $this->weatherService = $weatherService;
     }
-    public function index(){
-        $weather = $this->weatherService->getWeather(52.2298,21.0118);
+    public function index(Request $request){
+        // $request->validate(
+        //     [
+        //         "latitude"=>"float",
+        //         "longitude"=>"float|s"
+        //     ]
+        //     );
+          $latitude = $request->input('latitude');
+          $longitude= $request->input('longitude');
+
+        $weather = $this->weatherService->getWeather($latitude,$longitude);
         return new WeatherResource($weather);
+    }
+    public function searchCity(Request $request){
+        $request->validate(
+            [   
+                "city"=>'string'
+            ]
+            );
+        $city = $request->input('city');
+        return $this->weatherService->searchCity($city);
+
+    
     }
 
     // public function getWeather(){
