@@ -13,7 +13,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
-Route::get('/getWeather', [WeatherController::class,'getWeather']);
+Route::get('/getWeather', [WeatherController::class,'index']);
 
 
 require __DIR__.'/settings.php';
