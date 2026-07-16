@@ -1,7 +1,8 @@
 export const weatherMap = {
     0: {
         name: "Słonecznie",
-        icon: "/weather/sun.png"
+        icon: "/weather/sun.png",
+        background:"/weather/background/cloudsun.jpg"
     },
 
     1: {
@@ -11,12 +12,14 @@ export const weatherMap = {
 
     2: {
         name: "Częściowe zachmurzenie",
-        icon: "/weather/cloudsun.png"
+        icon: "/weather/cloudsun.png",
+        background:"/weather/background/cloudsun.jpg"
     },
 
     3: {
         name: "Pochmurno",
-        icon: "/weather/cloud.png"
+        icon: "/weather/cloud.png",
+        background:"/weather/background/cloud.jpg"
     },
 
     45: {
@@ -91,16 +94,19 @@ export const weatherMap = {
 
     95: {
         name: "Burza",
-        icon: "/weather/storm.png"
+        icon: "/weather/storm.png",
+        background:"weather/background/storm.jpg"
     },
 
     96: {
         name: "Burza z gradem",
-        icon: "/weather/stormrain.png"
+        icon: "/weather/stormrain.png",
+        background:"weather/background/storm.jpg"
     },
 
     99: {
         name: "Silna burza z gradem",
-        icon: "/weather/stormrain.png"
+        icon: "/weather/stormrain.png",
+        background:"weather/background/storm.jpg",
     }
 };

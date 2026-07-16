@@ -5,14 +5,22 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Weather');
+    return Inertia::render('Main');
 })->name('home');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
+
+Route::get('/profile', function () {
+    return Inertia::render('Main');
+})->name('home/settings');
+
+
+
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('dashboard', function () {
+//         return Inertia::render('dashboard');
+//     })->name('dashboard');
+// });
 
 Route::get('/getWeather', [WeatherController::class,'index']);
 Route::get('/searchCity',[WeatherController::class,'searchCity']);

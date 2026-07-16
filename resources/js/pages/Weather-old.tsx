@@ -2,7 +2,7 @@ import React,{useState,useEffect} from "react";
 import axios from "axios";
 import {Header} from '@/components/Header'
 import { Wind,Droplet, Sun,Clock4,Calendar } from "lucide-react";
-import { Chart } from "@/components/Charts";
+
 
  
 export default function Weather(){

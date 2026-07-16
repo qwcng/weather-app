@@ -1,8 +1,9 @@
+import { cn } from "@/lib/utils"
 
-export function CenterAll({children}){
+export function CenterAll({children,className}){
 
     return(
-        <div className="flex flex-col items-center justify-center w-full h-fit">
+        <div className={cn("flex flex-col items-center justify-center w-full h-fit",className)}>
             {children}
         </div>
     )

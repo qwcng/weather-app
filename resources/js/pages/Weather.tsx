@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import axios from "axios";
-import {Header} from '@/components/Header'
-import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus } from "lucide-react";
+// import {Header} from '@/components/Header'
+import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1 } from "lucide-react";
 import { Chart } from "@/components/Charts";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { CenterAll, CenterRow, CenterX, CenterY } from "@/components/utils/Center";
@@ -10,7 +10,8 @@ import { useRadarAxis } from "@mui/x-charts";
 import { weatherMap } from "@/utils/WeatherConditions"
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
- 
+import { Header } from "@/components/header/Header";
+import { Navbar } from "@/components/Navbar/Navbar";
 export default function Weather(){
     const[newCity,setNewCity] = useState("");
     const[weather,setWeather]= useState(null);
@@ -74,6 +75,17 @@ export default function Weather(){
 
         return weatherMap[code].icon;
     };
+    function getWeatherConditionBackground(code) {
+
+        if(!weatherMap[code]?.background) return "/weather/background/cloud.jpg";
+        else return weatherMap[code]?.background;
+    };
+    function getWeatherConditionLabel(code) {
+
+        return weatherMap[code].name;
+    };
+
+    
     
     function Card({index}){
 
@@ -95,37 +107,82 @@ export default function Weather(){
         </div>
         )
     }
-    // useEffect(()=>{
-        
-    //         if(localStorage.getItem("savedCities")){
-    //             localStorage.setItem("savedCities", JSON.stringify(savedCity||[]));
-    //             setSavedCity(JSON.parse(localStorage.getItem("savedCities")))
-    //         }
-    //         else{
-    // localStorage.setItem("savedCities",JSON.stringify([]))
-    //         }
-        
-    //     // localStorage.setItem("savedCities",JSON.stringify())
+    function TemperatureBar({temperature}){
+        const min = -10;
+        const max = 45;
+        const percent = Math.min(
+                                Math.max(((temperature-min) / (max-min)) * 100, 0),100
+                                );
 
-    // },savedCity)
-    useEffect(() => {
-        const cities = localStorage.getItem("savedCity");
+        return(
+            <div className="relative w-full h-3 rounded-full bg-gray-200 overflow-hidden">
+                <div
+                    className="absolute h-full w-full"
+                    style={{
+                    background: `
+                        linear-gradient(
+                        90deg,
+                        #2563eb 0%,
+                        #06b6d4 20%,
+                        #22c55e 50%,
+                        #facc15 70%,
+                        #ef4444 100%
+                        )
+                    `,
+                    }}
+                />
 
-        if(cities){
-            const city = JSON.parse(cities);
-            setSelectedCity(city)
-            console.warn(selectCity)
+                <div
+                    className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white  border-black rounded-full"
+                    style={{
+                    left: `${percent}%`,
+                    }}
+                 />
+            </div>
+        )
+
+    }
+    function DailyCard({index}){
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const target = new Date(weather?.data?.forecast[index].date);
+        const result =Math.round((target-today)/ 86400000);
+        let day;
+        if(result==0){
+            day="Dzisiaj"
         }
-    
-    }, [savedCity])
-    
+        if(result==1){
+            day="Jutro"
+        }
+        if(result>=2){
+            day=target.toLocaleDateString("pl-PL",{
+                weekday:"short"
+            })
+        }
 
+        
+        return(
+            <div className="w-full h-12 shrink-0    rounded-2xl flex flex-row justify-evenly  items-center text-white" >
+                <span className="font-semibold text-xl"> {day || <LoaderCircle className="animate-spin"size={12}/>} </span>
+
+                <img src={getWeatherConditionIcon(weather?.data?.forecast[index].weather_code)} alt="" className="w-12 object-contain"/>
+                <span className="font-semibold text-xl mr-3"> {weather?.data?.forecast[index].temperature_max || <LoaderCircle className="animate-spin"size={12}/>}°C</span>
+                <div className="w-42"><TemperatureBar temperature={weather?.data?.forecast[index].temperature_max}/> </div>
+            
+            </div>
+        )
+       }
+    
+    
     useEffect(()=>{
 
         const cities = localStorage.getItem("savedCity");
 
         if(cities){
         const city = JSON.parse(cities);
+        setSelectedCity(city)
+        console.warn(selectCity)
        
         console.log(city.name);
         }
@@ -163,6 +220,7 @@ export default function Weather(){
         
     function handleCityAdd(city){
        setSavedCity(city)
+       setSelectedCity(city)
 
        
     }
@@ -172,141 +230,18 @@ export default function Weather(){
     return(
         <>
         
-        {/* <Header/> */}
-        {/* <header> */}
-            {/* <button className="h-12 w-12 rounded-4xl  flex items-center justify-center bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 border border-gray-100">
-                <ArrowLeft className="text-white"/>
-            </button> */}
-        {/* </header> */}
-        <main className="bg-[url('weather/bg-cloud.jpg')] backdrop-brightness-[10%] bg-center bg-cover  h-dvh">
-            <div className="p-5 flex flex-row w-full align-center justify-evenly ">
-                <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 bg-gray-600/60  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
-                    <ArrowLeft className="text-white"/>
-                </button>
-                <AnimatePresence>
-                {searching ?
-                (
-                <motion.div
-                layout
-                initial={{
-                    width: 150,
-                    height: 48,
+        <main className={` backdrop-brightness-[10%] bg-center bg-cover  m-h-dvh`}
+                style={{
                     
-                    y: 0,
-                }}
-                animate={{
-                    width: 320,
-                    height: 300,
+                    backgroundImage: `url(${
+                    weather?.data?.current
+                        ? getWeatherConditionBackground(weather.data.current.weather_code)
+                        : "/weather/background/cloud.jpg"
+                    })`
                     
-                    y: 10,
-                }}
-                exit={{
-                    width: 150,
-                    height: 48,
-                    borderRadius: 999,
-                    y: 0,
-                }}
-                transition={{
-                    type: "tween",
-                    stiffness: 220,
-                    damping: 22,
-                }}
-                className="h-fit w-72 z-10 rounded-4xl  flex flex-col fixed p-4 justify-start items-center bg-gray-600/60 bg-opacity-0  bg-clip-padding backdrop-filter backdrop-blur-md  ">
-                  
-                   <button onClick={()=>setSearching(false)} className="flex flex-row"><span className="font-md font-semibold text-white mr-2" >{selectCity.name}</span> <ChevronDown className="text-white"/></button>
-                    
+                }}>
+                <Header searching={searching} setSearching={setSearching} newCity={newCity} setNewCity={setNewCity} fetchedCities={fetchedCities} handleCityAdd={handleCityAdd} selectCity={selectCity}/>
 
-                        <div className="font-md min-h-8 py-2 max-h-48 overflow-y-auto w-full flex flex-row justify-between items-center bg-black/10  font-semibold text-white mr-2">
-                        
-                         {newCity ? (
-                            <div className="flex flex-col w-full">
-                            {fetchedCities 
-                                ?(
-                                    fetchedCities.map((city)=>{
-                                        
-                                            return(
-                                                <CenterX>
-                                                    <button onClick={()=>handleCityAdd(city)} className="font-md  border-2  min-h-10 py-2 w-full flex flex-row justify-between items-center bg-black/30  font-semibold text-white mr-2">
-                                                        
-                                                           <div className="flex flex-row"><span className="font-md font-semibold text-white mr-2">{city.name},{city.admin1}</span> <Plus size={40} className="text-white"/></div>
-                                                        
-                                                    </button>
-                                                </CenterX>
-                                               
-                                            )
-                                })
-                                )
-                                :
-                                (   
-                                <>
-                                    {/* <p>{city.name},<span className="text-sm">city.admin1</span></p> <Plus className="text-white"/> */}
-                                    <span>wyszukiwanie</span>
-                                </>
-                                )}
-                                
-                           
-                                
-                            </div>)
-                            :
-                            (
-                                <>
-                                    <p>Warszawa,<span className="text-sm">mazowieckie</span></p> <X className="text-white"/>
-                                </>
-                                    
-                            )
-                            }
-                                </div> 
-                    
-                    
-                    <CenterRow>
-                            <div className="bottom-0">
-                                <input type="text" placeholder="Wpisz nazwę miejscowości" value={newCity} onChange={(e) => setNewCity(e.target.value)}  />
-                                {/* <Input placeholder="Wpisz nazwę miejscowości" style"/> */}
-                                <button onClick={handleCitySubmit}> <PlusIcon color="white"></PlusIcon></button>
-                            </div>
-                    </CenterRow>
-                    
-                </motion.div>
-                )
-                :(
-                <motion.button 
-                layout
-                initial={{
-                    width:150,
-                    height:48
-                }}
-                animate={{
-                    width:150,
-                    height:48
-                }}
-                onClick={()=>setSearching(true)} className="h-12 w-38 rounded-4xl  flex  items-center justify-center bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
-                   <span className="font-md font-semibold text-white mr-2">{selectCity.name}</span> <ChevronDown className="text-white"/>
-                </motion.button>
-                )
-            }
-            
-            </AnimatePresence>
-
-
-                <button className="h-12 w-12 rounded-4xl  flex items-center justify-center bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
-                        <Sidebar className="text-white"/>
-                </button>
-               
-
-                </div>
-                {/* <CenterAll>
-                    <div className="w-72 h-fit rounded-xl p-3 bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30">
-                        <CenterRow>
-                            <span className="font-md font-semibold text-white text-xl mr-2">Warszawa</span>
-                            <TrashIcon  className="text-white w-5 h-5"/>
-                        </CenterRow>
-                        <CenterRow>
-                            <input type="text" placeholder="Wpisz nazwę miejscowości" value={newCity} onChange={(e) => setNewCity(e.target.value)}  />
-                            <button onClick={handleCitySubmit}> <PlusIcon color="white"></PlusIcon></button>
-                        </CenterRow>
-
-                    </div>
-                </CenterAll> */}
             <CenterAll>
                     <h1 className="font-bold text-2xl text-white">{selectCity.name},<span className=" text-lg text-blue-50"> {selectCity.admin2}</span></h1>
                     <img src={weather?.data.current
@@ -314,7 +249,9 @@ export default function Weather(){
                     :"/weather/cloud.png"
                 } alt="" className="h-48" />
                     <h1 className="text-6xl font-extrabold text-white ">{weather?.data.current.temperature || <LoaderCircle className="animate-spin"size={40}/>}</h1>
-                    <span className="text-white"> Sooo Sunny</span>  
+                    <span className="text-white">{weather?.data.current
+                    ? getWeatherConditionLabel(weather?.data.current.weather_code)
+                    :"..."}</span>  
                  <div className="w-full flex flex-row justify-center items-center gap-14  text-white my-4 font-semibold text-md">
                      <span className=" flex flex-row justify-center items-center"> <Wind className="mr-3"/>{weather?.data.current.wind.speed || <LoaderCircle className="animate-spin"size={12}/>}km/h</span>
                      <span className=" flex flex-row justify-center items-center"> <Droplet className="mr-3"/>{weather?.data.current.humidity || <LoaderCircle className="animate-spin"size={12}/>}%</span>
@@ -323,8 +260,8 @@ export default function Weather(){
                  </div>                 
             </CenterAll>
             <Glass1>
-              <div className="w-full h-fit p-2     overflow-x-hidden">
-                    <span className=" flex flex-row text-white font-semibold "><Clock4/> Hourly Forecast</span>
+              <div className="w-full h-fit p-2 overflow-x-hidden">
+                    <span className=" flex flex-row text-gray-200 pb-1 border-b-1 border-gray-600  font-semibold "><Clock4/> Hourly Forecast</span>
                             {/* chart */}
                     <div className="w-full p-2  flex  gap-4 overflow-auto">
                         {weather?.data.hourly.map((hour,index)=>{
@@ -339,7 +276,27 @@ export default function Weather(){
                     </div>
                 </div>
             </Glass1>
+            <Glass1 className="mt-5">
+                <div className="w-full h-fit  p-2  overflow-x-hidden">
+                    <span className=" flex flex-row text-gray-200 font-semibold pb-1 border-b-1 border-gray-600 "><Calendar1 size={20}/> Daily Forecast</span>
+                            {/* chart */}
+                    <div className="w-full h-64   p-2  flex  flex-col gap-4 overflow-y-auto">
+                        {weather?.data.forecast.map((hour,index)=>{
+                            // console.log(index)
+                            return <DailyCard index={index}/>
+                            
+                        })}
+                        
+
+                        
+                        
+                        
+                    </div>
+                </div>
+
+            </Glass1>
         </main>
+        
         </>
     )
 

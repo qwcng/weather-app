@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 class WeatherService{
     
 
-    public function getWeather(float $latitude,float $longitude){
+    public function getWeather(float $latitude = 52.229,float $longitude=21.012){
         $response = Http::get(
         "https://api.open-meteo.com/v1/forecast",
         [
