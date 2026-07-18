@@ -2,12 +2,13 @@ export const weatherMap = {
     0: {
         name: "Słonecznie",
         icon: "/weather/sun.png",
-        background:"/weather/background/cloudsun.jpg"
+        background:"/weather/background/sun.jpg"
     },
 
     1: {
         name: "Przeważnie słonecznie",
-        icon: "/weather/sun.png"
+        icon: "/weather/sun.png",
+        background:"/weather/background/cloudsun.jpg"
     },
 
     2: {
@@ -35,31 +36,37 @@ export const weatherMap = {
     51: {
         name: "Lekka mżawka",
         icon: "/weather/rain.png"
+    
     },
 
     53: {
         name: "Mżawka",
         icon: "/weather/rain.png"
+
     },
 
     55: {
         name: "Silna mżawka",
-        icon: "/weather/heavyrain.png"
+        icon: "/weather/heavyrain.png",
+        background:"/weather/background/rain.jpg"
     },
 
     61: {
         name: "Lekki deszcz",
-        icon: "/weather/rain.png"
+        icon: "/weather/rain.png",
+        background:"/weather/background/rain.jpg"
     },
 
     63: {
         name: "Deszcz",
-        icon: "/weather/rain.png"
+        icon: "/weather/rain.png",
+        background:"/weather/background/rain.jpg"
     },
 
     65: {
         name: "Silny deszcz",
-        icon: "/weather/heavyrain.png"
+        icon: "/weather/heavyrain.png",
+        background:"/weather/background/rain.jpg"
     },
 
     71: {
@@ -79,17 +86,22 @@ export const weatherMap = {
 
     80: {
         name: "Przelotny deszcz",
-        icon: "/weather/rainsun.png"
+        icon: "/weather/rainsun.png",
+        background:"/weather/background/rain.jpg"
+        
     },
 
     81: {
         name: "Przelotny deszcz",
-        icon: "/weather/rain.png"
+        icon: "/weather/rain.png",
+        background:"/weather/background/rain.jpg"
     },
 
     82: {
         name: "Silne przelotne opady",
-        icon: "/weather/heavyrain.png"
+        icon: "/weather/heavyrain.png",
+        
+        background:"/weather/background/rain.jpg"
     },
 
     95: {

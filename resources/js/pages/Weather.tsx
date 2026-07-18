@@ -259,26 +259,25 @@ export default function Weather(){
      
                  </div>                 
             </CenterAll>
-            <Glass1>
+            <Glass1 className="w-[95vw] mx-auto rounded-2xl">
               <div className="w-full h-fit p-2 overflow-x-hidden">
-                    <span className=" flex flex-row text-gray-200 pb-1 border-b-1 border-gray-600  font-semibold "><Clock4/> Hourly Forecast</span>
+                    <span className=" flex flex-row text-gray-200 pb-1 border-b-1 border-gray-600  font-semibold  "><Clock4 className="mr-1.5"/> Hourly Forecast</span>
                             {/* chart */}
                     <div className="w-full p-2  flex  gap-4 overflow-auto">
+                        
                         {weather?.data.hourly.map((hour,index)=>{
                             // console.log(index)
+
                             return <Card index={index}/>
                             
                         })}
 
-                        
-                        
-                        
                     </div>
                 </div>
             </Glass1>
-            <Glass1 className="mt-5">
+            <Glass1 className="mt-5 w-[95vw] mx-auto rounded-2xl">
                 <div className="w-full h-fit  p-2  overflow-x-hidden">
-                    <span className=" flex flex-row text-gray-200 font-semibold pb-1 border-b-1 border-gray-600 "><Calendar1 size={20}/> Daily Forecast</span>
+                    <span className=" flex flex-row text-gray-200 font-semibold pb-1 border-b-1 border-gray-600 "><Calendar1 size={20} className="mr-1.5"/> 10-day forecast</span>
                             {/* chart */}
                     <div className="w-full h-64   p-2  flex  flex-col gap-4 overflow-y-auto">
                         {weather?.data.forecast.map((hour,index)=>{

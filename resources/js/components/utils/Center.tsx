@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-
+        
 export function CenterAll({children,className}){
 
     return(

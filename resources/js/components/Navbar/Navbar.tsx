@@ -52,7 +52,7 @@ export function Navbar({active,setActive}) {
                         onClick={() => setActive("profile")}
                         className="relative flex-1 flex flex-col items-center justify-center"
                     >
-                        {active === "settings" && (
+                        {active === "profile" && (
                             <motion.div
                                 layoutId="navbar"
                                 className="absolute inset-1 rounded-3xl bg-white/10 backdrop-blur-10 border border-white/20 backdrop:saturate-200"
