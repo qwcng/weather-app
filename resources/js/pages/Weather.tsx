@@ -12,54 +12,57 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header } from "@/components/header/Header";
 import { Navbar } from "@/components/Navbar/Navbar";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+const defaultCity = {
+    id:756135,
+    name:"Warszawa",
+    latitude:52.22977,
+    longitude:21.01178,
+    country:"Polska",
+    admin1:"Województwo mazowieckie",
+    admin2:"Warszaw",
+};
 export default function Weather(){
     const[newCity,setNewCity] = useState("");
     const[weather,setWeather]= useState(null);
     const[searching,setSearching]= useState(false);
     const[fetchedCities,setFetchCities]= useState();
-    const[savedCity, setSavedCity]= useState();
-    const[selectCity,setSelectedCity]=useState("warsszawa");
-    // const[currentCity]
+    // const[savedCity, setSavedCity]= useLocalStorage("savedCity",defaultCity);
+    const[selectCity,setSelectedCity]=useLocalStorage("savedCity",defaultCity);
+    const [temperatureUnit, setTemperatureUnit] =useLocalStorage("temperature","celsius");
+    const [windUnit, setWindUnit] = useLocalStorage("wind","kmh");
+    const [timeFormat, setTimeFormat] = useLocalStorage("time", "24h");
 
+
+    
     useEffect(()=>{
-        console.log("FETCH WEATHER");
-
         async function fetchWeather(){
-            const response = await axios.get(`/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}`);
+            let url = `/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}&time=${'24h'}`;
+            if(temperatureUnit ==="fahrenheit"){
+                url+=`&temp=${temperatureUnit}`
+                // `/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}&temp=${temperatureUnit}&time=${timeFormat}`);
+            }
+            if(windUnit==="mph"){
+                url+=`&wind=${windUnit}`
+            }
+            const response = await axios.get(url)
             setWeather(response.data);
         }
-        
-    
-
-    
     fetchWeather();
 
 
-    },[selectCity])
-
-    useEffect(()=>{
-        console.log("zmiana",weather);
-        console.log('temp', weather?.data.current.temperature)
-        // console.log (weather?.data.current.wind.speed)
-        console.log("kod",weather?.data?.current?.weather_code);
-
-    },[weather])
+    },[selectCity,temperatureUnit])
 
     useEffect(()=>{
 
         if(newCity.length>3){
             setTimeout(()=>{
                 axios.get(`/searchCity?city=${newCity}`).then((response)=>{
-                    // console.log(response.data.results)
                     setFetchCities(response.data.results)
                 })
                 
             },500)
-
         }
-
-
-
     },[newCity])
 
     function handleCitySubmit(){
@@ -100,7 +103,7 @@ export default function Weather(){
         
         <div className="w-26 h-34 shrink-0 border-1 rounded-2xl flex flex-col justify-center items-center text-white" >
             <img src={getWeatherConditionIcon(weather?.data?.hourly[index]?.weather_code)} alt="" className="w-16 object-contai"/>
-           <span className="font-semibold text-xl"> {weather?.data?.hourly[index]?.temperature || <LoaderCircle className="animate-spin"size={12}/>}°C</span>
+           <span className="font-semibold text-xl"> {weather?.data?.hourly[index]?.temperature || <LoaderCircle className="animate-spin"size={12}/>}{weather?.data?.current.temperature_unit}</span>
             <span>{day}, {time}</span>
             {/* <span>{time}</span>  */}
            
@@ -167,59 +170,16 @@ export default function Weather(){
                 <span className="font-semibold text-xl"> {day || <LoaderCircle className="animate-spin"size={12}/>} </span>
 
                 <img src={getWeatherConditionIcon(weather?.data?.forecast[index].weather_code)} alt="" className="w-12 object-contain"/>
-                <span className="font-semibold text-xl mr-3"> {weather?.data?.forecast[index].temperature_max || <LoaderCircle className="animate-spin"size={12}/>}°C</span>
+                <span className="font-semibold text-xl mr-3"> {weather?.data?.forecast[index].temperature_max || <LoaderCircle className="animate-spin"size={12}/>}{weather?.data?.current.temperature_unit}</span>
                 <div className="w-42"><TemperatureBar temperature={weather?.data?.forecast[index].temperature_max}/> </div>
             
             </div>
         )
        }
     
-    
-    useEffect(()=>{
-
-        const cities = localStorage.getItem("savedCity");
-
-        if(cities){
-        const city = JSON.parse(cities);
-        setSelectedCity(city)
-        console.warn(selectCity)
-       
-        console.log(city.name);
-        }
-        else{
-            const defaultCity = {
-                id:756135,
-                name:"Warszawa",
-                latitude:52.22977,
-                longitude:21.01178,
-                country:"Polska",
-                admin1:"Województwo mazowieckie",
-                admin2:"Warszaw",
-            };
-
-            localStorage.setItem(
-                "savedCity",
-                JSON.stringify(defaultCity)
-            );
-
-            setSavedCity(defaultCity);
-            setSelectedCity(defaultCity);
-        }
-
-    },[]);
-    useEffect(()=>{
-
-    if(savedCity){
-        localStorage.setItem(
-            "savedCity",
-            JSON.stringify(savedCity)
-        );
-    }
-
-},[savedCity]);
-        
     function handleCityAdd(city){
-       setSavedCity(city)
+    //    setSavedCity(city)
+       
        setSelectedCity(city)
 
        
@@ -230,7 +190,7 @@ export default function Weather(){
     return(
         <>
         
-        <main className={` backdrop-brightness-[10%] bg-center bg-cover  m-h-dvh`}
+        <main className={` backdrop-brightness-[10%] bg-center bg-cover  min-h-dvh`}
                 style={{
                     
                     backgroundImage: `url(${
@@ -248,7 +208,7 @@ export default function Weather(){
                     ? getWeatherConditionIcon(weather?.data.current.weather_code)
                     :"/weather/cloud.png"
                 } alt="" className="h-48" />
-                    <h1 className="text-6xl font-extrabold text-white ">{weather?.data.current.temperature || <LoaderCircle className="animate-spin"size={40}/>}</h1>
+                    <h1 className="text-6xl font-extrabold text-white ">{weather?.data.current.temperature || <LoaderCircle className="animate-spin"size={40}/>}{weather?.data?.current.temperature_unit}</h1>
                     <span className="text-white">{weather?.data.current
                     ? getWeatherConditionLabel(weather?.data.current.weather_code)
                     :"..."}</span>  

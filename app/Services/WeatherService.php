@@ -7,12 +7,19 @@ use Illuminate\Support\Facades\Http;
 class WeatherService{
     
 
-    public function getWeather(float $latitude = 52.229,float $longitude=21.012){
+    public function getWeather(float $latitude = 52.229,float $longitude=21.012, string $temp,string $wind, string $time){
         $response = Http::get(
         "https://api.open-meteo.com/v1/forecast",
         [
             'latitude' => $latitude,
             'longitude' => $longitude,
+            'temperature_unit'=>$temp,
+           
+            // if($wind !="kmh"){
+            //     'wind_speed_unit'=>$wind,
+            // }
+           
+            
 
             'current' => implode(',', [
                 'temperature_2m',

@@ -20,6 +20,7 @@ class WeatherResource extends JsonResource
 
             'current' => [
                 'temperature' => $this['current']['temperature_2m'],
+                'temperature_unit'=>$this['current_units']['temperature_2m'],
                 'feels_like' => $this['current']['apparent_temperature'],
                 'humidity' => $this['current']['relative_humidity_2m'],
                 'weather_code' => $this['current']['weather_code'],

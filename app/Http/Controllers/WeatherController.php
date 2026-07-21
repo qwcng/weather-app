@@ -32,8 +32,11 @@ class WeatherController extends Controller
         else{
           $latitude = $request->input('latitude');
           $longitude= $request->input('longitude');
+          $temp =$request->input('temp','celsius');
+          $wind =$request->input('wind',"kmh");
+          $time=$request->input('time');
         }
-        $weather = $this->weatherService->getWeather($latitude,$longitude);
+        $weather = $this->weatherService->getWeather($latitude,$longitude,$temp,$wind,$time);
         return new WeatherResource($weather);
     }
     public function searchCity(Request $request){
