@@ -25,7 +25,10 @@ export default defineConfig({
                 description: 'The best weather app, clear design',
                 theme_color: '#111827',
                 background_color: '#111827',
+                start_url: '/',
+                scope: '/',
                 display: 'standalone',
+                
 
                 icons: [
                     {
