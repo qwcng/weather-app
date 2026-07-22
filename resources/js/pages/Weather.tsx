@@ -2,7 +2,6 @@ import React,{useState,useEffect} from "react";
 import axios from "axios";
 // import {Header} from '@/components/Header'
 import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1 } from "lucide-react";
-import { Chart } from "@/components/Charts";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { CenterAll, CenterRow, CenterX, CenterY } from "@/components/utils/Center";
 import { Glass1 } from "@/components/utils/Morphisim";
@@ -32,11 +31,16 @@ export default function Weather(){
     const [temperatureUnit, setTemperatureUnit] =useLocalStorage("temperature","celsius");
     const [windUnit, setWindUnit] = useLocalStorage("wind","kmh");
     const [timeFormat, setTimeFormat] = useLocalStorage("time", "24h");
+    const [savedWeather, setSavedWeather]= useLocalStorage('savedWeather',null)
 
 
-    
+    function normalize(a,b){
+        // console.log(Number(number.toFixed(2)));
+        return (Math.abs(a - b) <=0.02)
+    }
     useEffect(()=>{
         async function fetchWeather(){
+            
             let url = `/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}&time=${'24h'}`;
             if(temperatureUnit ==="fahrenheit"){
                 url+=`&temp=${temperatureUnit}`
@@ -47,10 +51,26 @@ export default function Weather(){
             }
             const response = await axios.get(url)
             setWeather(response.data);
+            setSavedWeather({
+                cityId: selectCity.id,
+                data: response.data
+                })
         }
-    fetchWeather();
-
-
+                if(savedWeather.cityId === selectCity.id){
+                    const now = new Date();
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(),now.getHours(),now.getMinutes(),now.getSeconds());
+                    const target = new Date(savedWeather.data.data.current.fetched_at);
+                    const diff = Math.round((now-target)/1000/60);
+                    if(diff >30){
+                        fetchWeather();
+                        return;
+                    }
+                    setWeather(savedWeather.data);
+                    return;
+                }
+                else{
+                    fetchWeather()
+                }
     },[selectCity,temperatureUnit])
 
     useEffect(()=>{
@@ -178,8 +198,6 @@ export default function Weather(){
        }
     
     function handleCityAdd(city){
-    //    setSavedCity(city)
-       
        setSelectedCity(city)
 
        

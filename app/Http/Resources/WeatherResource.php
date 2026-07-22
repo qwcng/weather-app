@@ -28,6 +28,10 @@ class WeatherResource extends JsonResource
                 'precipitation' => $this['current']['precipitation'],
                 'cloud_cover' => $this['current']['cloud_cover'],
                 'pressure' => $this['current']['pressure_msl'],
+                'fetched_at' => now()->toIso8601String(),
+                'latitude'=>$this['latitude'],
+                'longitude'=>$this['longitude'],
+                
 
                 'wind' => [
                     'speed' => $this['current']['wind_speed_10m'],
