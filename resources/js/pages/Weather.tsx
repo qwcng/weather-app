@@ -56,6 +56,7 @@ export default function Weather(){
                 data: response.data
                 })
         }
+            if(savedWeather){
                 if(savedWeather.cityId === selectCity.id){
                     const now = new Date();
                     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(),now.getHours(),now.getMinutes(),now.getSeconds());
@@ -71,6 +72,10 @@ export default function Weather(){
                 else{
                     fetchWeather()
                 }
+            }
+            else{
+                fetchWeather();
+            }
     },[selectCity,temperatureUnit])
 
     useEffect(()=>{
@@ -126,7 +131,9 @@ export default function Weather(){
            <span className="font-semibold text-xl"> {weather?.data?.hourly[index]?.temperature || <LoaderCircle className="animate-spin"size={12}/>}{weather?.data?.current.temperature_unit}</span>
             <span>{day}, {time}</span>
             {/* <span>{time}</span>  */}
-           
+            <span className="text-sm flex items-center gap-1">
+                💧 {weather?.data?.hourly[index]?.precipation} mm
+            </span>
         </div>
         )
     }
@@ -202,9 +209,6 @@ export default function Weather(){
 
        
     }
-   
-    
-    
     return(
         <>
         

@@ -40,6 +40,7 @@ class WeatherService{
                 'relative_humidity_2m',
                 'weather_code',
                 'precipitation_probability',
+                'precipitation',
                 'wind_speed_10m',
             ]),
 
@@ -52,6 +53,7 @@ class WeatherService{
                 'daylight_duration',
                 'sunshine_duration',
                 'precipitation_probability_max',
+                
                 'wind_speed_10m_max',
             ]),
 
