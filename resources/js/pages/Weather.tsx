@@ -58,7 +58,7 @@ export default function Weather(){
                 data: response.data
                 })
         }
-            if(savedWeather.data>0){
+            if(savedWeather?.data>0){
                 if(savedWeather.cityId === selectCity.id){
                     const now = new Date();
                     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(),now.getHours(),now.getMinutes(),now.getSeconds());
