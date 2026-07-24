@@ -19,12 +19,6 @@ class WeatherController extends Controller
         $this->weatherService = $weatherService;
     }
     public function index(Request $request){
-        // $request->validate(
-        //     [
-        //         "latitude"=>"float",
-        //         "longitude"=>"float|s"
-        //     ]
-        //     );
         if(!$request->input('latitude') && !$request->input('longitude')){
             $latitude = 52.229;
             $longitude= 21.012; 

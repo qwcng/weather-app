@@ -38,7 +38,6 @@ export default function Weather(){
 
 
     function normalize(a,b){
-        // console.log(Number(number.toFixed(2)));
         return (Math.abs(a - b) <=0.02)
     }
     useEffect(()=>{
