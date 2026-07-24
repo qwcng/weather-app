@@ -63,7 +63,7 @@ export default function Profile(){
 {/* <Glass1 className="w-[95vw] mx-auto rounded-2xl"> */}
             <div className="p-3 flex flex-col gap-5">
 {/* border-b-1 border-gray-600 */}
-                <span className=" flex flex-row text-gray-200 pb-1   font-semibold  "><Settings className="mr-1.5"/> Settings</span>
+                <span className=" flex flex-row text-gray-200 pb-1   font-semibold  "><Settings className="mr-1.5"/> LOL USTAWIENIA</span>
 
 
                 <div>
