@@ -20,7 +20,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
     
     return(
     <div className=" relative p-5 flex flex-row w-full align-center justify-evenly ">
-                <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 bg-gray-600/60  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
+                <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
                     <ArrowLeft className="text-white"/>
                 </button>
                 <AnimatePresence mode="wait">
@@ -99,6 +99,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                 )
                 :(
                 <motion.button 
+               
                 key="search-button"
                 whileHover={{
                     scale:1.1
@@ -117,7 +118,8 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                 exit={{
                     opacity: 0,
                 }}
-                onClick={()=>setSearching(true)} className="h-12 w-38 rounded-4xl  flex  items-center justify-center bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
+                onClick={()=>setSearching(true)} 
+                className="h-12 w-38 rounded-4xl  flex  items-center justify-center border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
                    <span className="font-md font-semibold text-white mr-2">{selectCity.name}</span> <ChevronDown className="text-white"/>
                 </motion.button>
                 )
@@ -126,7 +128,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
             </AnimatePresence>
 
 
-                <button className="h-12 w-12 rounded-4xl  flex items-center justify-center bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
+                <button className="h-12 w-12 rounded-4xl  flex items-center justify-center border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
                         <Sidebar className="text-white"/>
                 </button>
                

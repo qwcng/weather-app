@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import axios from "axios";
 // import {Header} from '@/components/Header'
-import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1, Thermometer, Gauge, Navigation, CloudRainWind, CloudRain } from "lucide-react";
+import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1, Thermometer, Gauge, Navigation, CloudRainWind, CloudRain, ArrowUpRightIcon } from "lucide-react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { CenterAll, CenterRow, CenterX, CenterY } from "@/components/utils/Center";
 import { Glass1 } from "@/components/utils/Morphisim";
@@ -35,7 +35,8 @@ export default function Weather(){
     const [savedWeather, setSavedWeather]= useLocalStorage('savedWeather',null)
     const [customTheme,setCustomTheme] =useLocalStorage('theme','default');
     const [customBackground,setCustomBackground] =useLocalStorage('background',null);
-
+    const [detailsOpen,setDetailsOpen] = useState(false);
+    const [selectedDay, setSelectedDay] = useState(null);
 
     function normalize(a,b){
         return (Math.abs(a - b) <=0.02)
@@ -114,6 +115,14 @@ export default function Weather(){
 
         return weatherMap[code].name;
     };
+    function viewDetails(day){
+        setSelectedDay(day);
+        setDetailsOpen(true);
+    }
+    function closeDetails(){
+        setSelectedDay(null);
+        setDetailsOpen(false);
+    }
 
     
     
@@ -202,7 +211,7 @@ export default function Weather(){
                 <img src={getWeatherConditionIcon(weather?.data?.forecast[index].weather_code)} alt="" className="w-12 object-contain"/>
                 <span className="font-semibold text-xl mr-3"> {weather?.data?.forecast[index].temperature_max || <LoaderCircle className="animate-spin"size={12}/>}{weather?.data?.current.temperature_unit}</span>
                 <div className="w-42"><TemperatureBar temperature={weather?.data?.forecast[index].temperature_max}/> </div>
-            
+                <button value={weather?.data?.forecast[index].date} onClick={(e)=>{viewDetails(weather?.data?.forecast[index].date)}}> <ArrowUpRightIcon size={32} /></button>
             </div>
         )
        }
@@ -244,12 +253,11 @@ export default function Weather(){
         <main className={` backdrop-brightness-[10%] bg-cover bg-fixed bg-center bg-no-repeat  min-h-dvh pb-24`}
                 style={{
                     
-                    backgroundImage: `url(${bgImage
-                    })`
+                    backgroundImage: `url(${bgImage})`
                     
                 }}>
                 <Header searching={searching} setSearching={setSearching} newCity={newCity} setNewCity={setNewCity} fetchedCities={fetchedCities} handleCityAdd={handleCityAdd} selectCity={selectCity}/>
-
+            
             <CenterAll>
                     <h1 className="font-bold text-2xl text-white">{selectCity.name},<span className=" text-lg text-blue-50"> {selectCity.admin2}</span></h1>
                     <img src={weather?.data.current

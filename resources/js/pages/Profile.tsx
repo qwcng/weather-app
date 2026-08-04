@@ -23,11 +23,17 @@ export default function Profile(){
         reader.onloadend = () => setCustomBackground(reader.result);
         reader.readAsDataURL(file);
     };
+     const bgImage = customTheme === "custom" && customBackground
+  ? customBackground
+  :  "/weather/background/cloud.jpg";
     // console.log(temperatureUnit)
     return (
-        <main className="relative h-dvh   overflow-hidden bg-[url('/weather/background/cloudsun.jpg')] bg-center bg-cover">
+        <main className="relative h-dvh   overflow-hidden bg-center bg-cover"
+                style={{
+                    backgroundImage: `url(${bgImage})`
+                }}>
             <div className=" relative p-5 flex flex-row w-full align-center justify-evenly ">
-                <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 bg-gray-600/60  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
+                <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
                     <ArrowLeft className="text-white"/>
                 </button>
                 <AnimatePresence mode="wait">
@@ -50,12 +56,12 @@ export default function Profile(){
                     exit={{
                         opacity: 0,
                     }}
-                    className="h-12 w-38 rounded-4xl  flex  items-center justify-center bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
+                    className="h-12 w-38 rounded-4xl  flex  items-center justify-center border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
                         <span className="font-md font-semibold text-white mr-2">Ustawienia</span> 
                     </motion.button>
                 </AnimatePresence>
 
-                <button className="h-12 w-12 rounded-4xl  flex items-center justify-center bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30 ">
+                <button className="h-12 w-12 rounded-4xl  flex items-center justify-center border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
                         <Sidebar className="text-white"/>
                 </button>
                
