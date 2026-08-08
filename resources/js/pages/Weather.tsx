@@ -266,7 +266,7 @@ export default function Weather(){
 
         return(
              <Glass1 className="min-h-full w-full fixed inset-0  overflow-y-auto top-0 z-100  rounded-2xl">
-              <div className=" relative p-5 flex flex-row w-full align-center justify-evenly ">
+              <div className=" text-white relative p-5 flex flex-row w-full align-center justify-evenly ">
                 <button 
                 onClick={closeDetails}
                 className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
