@@ -72,7 +72,7 @@ export default function Profile(){
 {/* <Glass1 className="w-[95vw] mx-auto rounded-2xl"> */}
             <div className="p-3 flex flex-col gap-5">
 {/* border-b-1 border-gray-600 */}
-                <span className=" flex flex-row text-gray-200 pb-1   font-semibold  "><Settings className="mr-1.5"/> Settings</span>
+                <span className=" flex flex-row text-gray-200 pb-1   font-semibold  "><Settings className="mr-1.5"/> Ustawienia</span>
 
 
                 <div>
@@ -173,6 +173,7 @@ export default function Profile(){
                 
                     <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
                         <CenterRow><button onClick={() => window.location.reload()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Odśwież</span><RefreshCcwDot className="inline-block"/></button></CenterRow>                    
+                            {/* <button className="mt-2"></button> */}
                     </Glass1>
                     {user ? (
                         <Glass1 className="p-2 min-w-[35%] h-12 rounded-4xl border-2 border-white/10 bg-black/20 backdrop-blur-[3px] font-semibold text-white px-4">
