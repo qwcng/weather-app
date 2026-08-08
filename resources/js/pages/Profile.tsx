@@ -2,12 +2,15 @@ import { CenterRow } from "@/components/utils/Center";
 import { GlassSelect } from "@/components/utils/GlassSelect";
 import { Glass1, GlassDark } from "@/components/utils/Morphisim";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { usePage } from "@inertiajs/react";
 import { Value } from "@radix-ui/react-select";
 import { AnimatePresence,motion } from "framer-motion";
-import { ArrowLeft, ChevronDown, Clock4, LogIn, RefreshCcwDot, Settings, Sidebar } from "lucide-react";
+import { ArrowLeft, ChevronDown, Clock4, LogIn, RefreshCcwDot, Settings, Sidebar, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function Profile(){
+    const { auth } = usePage().props as any;
+    const user = auth?.user;
     // const [city, setCity] = useLocalStorage("t);
     const [temperatureUnit, setTemperatureUnit] =useLocalStorage("temperature","celsius");
     const [windUnit, setWindUnit] = useLocalStorage("wind","kmh");
@@ -171,9 +174,20 @@ export default function Profile(){
                     <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
                         <CenterRow><button onClick={() => window.location.reload()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Odśwież</span><RefreshCcwDot className="inline-block"/></button></CenterRow>                    
                     </Glass1>
-                    <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
-                        <CenterRow><button onClick={() => window.location.href='/login'} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Zaloguj się</span><LogIn className="inline-block"/></button></CenterRow>                    
-                    </Glass1>
+                    {user ? (
+                        <Glass1 className="p-2 min-w-[35%] h-12 rounded-4xl border-2 border-white/10 bg-black/20 backdrop-blur-[3px] font-semibold text-white px-4">
+                            <CenterRow>
+                                <span className="flex flex-row items-center gap-2 text-sm">
+                                    <UserIcon className="h-4 w-4 inline-block" />
+                                    Zalogowano jako: <strong className="text-white font-bold">{user.name || user.email}</strong>
+                                </span>
+                            </CenterRow>
+                        </Glass1>
+                    ) : (
+                        <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10 bg-brown-900/10 backdrop-blur-[3px] font-semibold">
+                            <CenterRow><button onClick={() => window.location.href='/login'} className="flex flex-row items-center justify-center gap-2 text-center mx-auto"><span>Zaloguj się</span><LogIn className="inline-block"/></button></CenterRow>                    
+                        </Glass1>
+                    )}
 
                 
             </div>

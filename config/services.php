@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'versec' => [
+        'client_id' => env('VERSEC_CLIENT_ID'),
+        'client_secret' => env('VERSEC_CLIENT_SECRET'),
+        'redirect' => env('VERSEC_REDIRECT_URI', 'http://127.0.0.1:8001/auth/versec/callback'),
+        'base_url' => env('VERSEC_SERVER_URL', 'http://127.0.0.1:8000'),
+    ],
+
 ];

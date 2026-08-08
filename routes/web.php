@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VersecController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,7 +13,8 @@ Route::get('/', function () {
 Route::get('/profile', function () {
     return Inertia::render('Main');
 })->name('home/settings');
-
+Route::get('/auth/versec', [VersecController::class, 'redirect'])->name('versec.redirect'); 
+Route::get('/auth/versec/callback', [VersecController::class, 'callback']);
 
 
 
