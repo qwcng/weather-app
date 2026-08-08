@@ -88,6 +88,11 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Log in
                     </Button>
+                    <Button className="mt-4 w-full" tabIndex={4} disabled={processing} onClick={window.location.href =""}>
+                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        <img src='logo.png'className='h-8 w-8'/>
+                        Kontynuuj za pomocą Versec Drive
+                    </Button>
                 </div>
 
                 <div className="text-muted-foreground text-center text-sm">
