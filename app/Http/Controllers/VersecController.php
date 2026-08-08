@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ class VersecController extends Controller
         return Socialite::driver('versec')->redirect();
     }
 
-    public function callback() {
+    public function callback(Request $request) {
         $versecUser = Socialite::driver('versec')->stateless()->user();
 
         $user = User::updateOrCreate([
@@ -23,7 +24,9 @@ class VersecController extends Controller
             'password' => bcrypt(\Illuminate\Support\Str::random(16)),
         ]);
 
-        Auth::login($user);
+        Auth::login($user, true);
+        $request->session()->regenerate();
+
         return redirect('/');
     }
 }
