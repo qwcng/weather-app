@@ -42,6 +42,7 @@ class WeatherService{
                 'precipitation_probability',
                 'precipitation',
                 'wind_speed_10m',
+                'wind_direction_10m',
             ]),
 
             'daily' => implode(',', [
@@ -61,7 +62,7 @@ class WeatherService{
             'timezone' => 'auto',
         ]
         );
-        // dd($response->json());
+        // dd($response->json()['daily']);
         return $response->json();
 
     }

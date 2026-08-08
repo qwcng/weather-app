@@ -1,10 +1,10 @@
 import React,{useState,useEffect} from "react";
 import axios from "axios";
 // import {Header} from '@/components/Header'
-import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1, Thermometer, Gauge, Navigation, CloudRainWind, CloudRain, ArrowUpRightIcon } from "lucide-react";
+import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1, Thermometer, Gauge, Navigation, CloudRainWind, CloudRain, ArrowUpRightIcon, PinIcon, LocateIcon, HelpCircle, Sunrise, Sunset, Clock } from "lucide-react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { CenterAll, CenterRow, CenterX, CenterY } from "@/components/utils/Center";
-import { Glass1 } from "@/components/utils/Morphisim";
+import { Glass1, GlassDark } from "@/components/utils/Morphisim";
 import { useRadarAxis } from "@mui/x-charts";
 import { weatherMap } from "@/utils/WeatherConditions"
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { Header } from "@/components/header/Header";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {ResponsiveContainer,AreaChart,Area,XAxis,YAxis,Tooltip,CartesianGrid,} from "recharts";
+import DetailCard, { WindCard } from "@/components/Weather/DetailsCard";
 const defaultCity = {
     id:756135,
     name:"Warszawa",
@@ -36,7 +37,7 @@ export default function Weather(){
     const [customTheme,setCustomTheme] =useLocalStorage('theme','default');
     const [customBackground,setCustomBackground] =useLocalStorage('background',null);
     const [detailsOpen,setDetailsOpen] = useState(false);
-    const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedDay, setSelectedDay] = useState(1);
 
     function normalize(a,b){
         return (Math.abs(a - b) <=0.02)
@@ -104,7 +105,7 @@ export default function Weather(){
     }
     function getWeatherConditionIcon(code) {
 
-        return weatherMap[code].icon;
+        return weatherMap[code]?.icon || "/weather/cloud.png";
     };
     function getWeatherConditionBackground(code) {
 
@@ -113,7 +114,7 @@ export default function Weather(){
     };
     function getWeatherConditionLabel(code) {
 
-        return weatherMap[code].name;
+        return weatherMap[code]?.name || "/weather/cloud.png";
     };
     function viewDetails(day){
         setSelectedDay(day);
@@ -127,8 +128,6 @@ export default function Weather(){
     
     
     function Card({index}){
-
-
         const day =new Date(weather?.data?.hourly[index]?.time).toLocaleDateString("pl-PL", { weekday:"short" });
         const time = new Date(weather?.data?.hourly[index]?.time).toLocaleTimeString('pl-PL',{
             hour:"2-digit",
@@ -137,14 +136,27 @@ export default function Weather(){
         return(
 
         
-        <div className="w-26 h-34 shrink-0 border-1 border-gray-600 rounded-2xl flex flex-col justify-center items-center text-white" >
+        <div className="w-30 h-40 shrink-0 border-1 border-gray-600 rounded-2xl flex flex-col justify-center items-center p-2   bg-white/5   text-white backdrop-blur-md" >
             <img src={getWeatherConditionIcon(weather?.data?.hourly[index]?.weather_code)} alt="" className="w-16 object-contai"/>
            <span className="font-semibold text-xl"> {weather?.data?.hourly[index]?.temperature || <LoaderCircle className="animate-spin"size={12}/>}{weather?.data?.current.temperature_unit}</span>
             <span>{day}, {time}</span>
             {/* <span>{time}</span>  */}
-            <span className="text-sm flex items-center gap-1">
-                💧 {weather?.data?.hourly[index]?.precipation} mm
+           <div className="flex flex-col gap-0.5 w-full text-center text-[11px] text-gray-300 border-t border-white/10 mt-1 p-1">
+            <span className="flex items-center justify-center gap-1">
+                💧 {weather?.data?.hourly[index]?.precipation ?? 0} mm
             </span>
+            <span className="flex items-center justify-center gap-1 text-yellow-200/90 font-medium">
+                <Wind size={11} />
+                {weather?.data?.hourly[index]?.wind_speed ?? "–"} {windUnit === "mph" ? "mph" : "km/h"}
+                {weather?.data?.hourly[index]?.wind_direction !== undefined && (
+                <Navigation
+                    size={10}
+                    className="fill-current transition-transform duration-300"
+                    style={{ transform: `rotate(${weather?.data?.hourly[index]?.wind_direction}deg)` }}
+                />
+                )}
+            </span>
+        </div>
         </div>
         )
     }
@@ -211,7 +223,7 @@ export default function Weather(){
                 <img src={getWeatherConditionIcon(weather?.data?.forecast[index].weather_code)} alt="" className="w-12 object-contain"/>
                 <span className="font-semibold text-xl mr-3"> {weather?.data?.forecast[index].temperature_max || <LoaderCircle className="animate-spin"size={12}/>}{weather?.data?.current.temperature_unit}</span>
                 <div className="w-42"><TemperatureBar temperature={weather?.data?.forecast[index].temperature_max}/> </div>
-                <button value={weather?.data?.forecast[index].date} onClick={(e)=>{viewDetails(weather?.data?.forecast[index].date)}}> <ArrowUpRightIcon size={32} /></button>
+                <button value={weather?.data?.forecast[index].date} onClick={(e)=>{viewDetails(index)}}> <ArrowUpRightIcon size={32} /></button>
             </div>
         )
        }
@@ -242,11 +254,114 @@ export default function Weather(){
     if (degrees >= 247.5 && degrees < 292.5) return "W";
     if (degrees >= 292.5 && degrees < 337.5) return "NW";
   }
+   function WeatherDetails({data}){
+    // console.log(data.data.data)
+    const weather = data?.data?.data;
+    const weatherDate = new Date(weather?.forecast[0]?.date)
+    // console.log(24*1 + 23)
+    for(let i=24*selectedDay; i<=24*selectedDay + 23; i++){
+        console.log(weather.hourly[i].time)
+        console.warn(i)
+    }
+
+        return(
+             <Glass1 className="min-h-full w-full fixed inset-0  overflow-y-auto top-0 z-100  rounded-2xl">
+              <div className=" relative p-5 flex flex-row w-full align-center justify-evenly ">
+                <button 
+                onClick={closeDetails}
+                className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
+                    <ArrowLeft className="text-white"/>
+                </button>
+                <button  className="h-12 w-fit rounded-4xl  flex items-center justify-center  border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
+                     <span>{weatherDate.toLocaleDateString('pl-PL', {
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                        })}</span>
+                </button>
+                <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
+                    <HelpCircle className="text-white"/>
+                </button>
+                 </div>
+                <div className="font-bold p-2">
+                    <h1 className="text-2xl">
+                        Weather Details
+                    </h1>
+                    <div className="w-[95vw] grid grid-cols-2 gap-3 my-4 mx-auto" >
+                        <DetailCard
+                        label="Sunrise"
+                        color="orange"
+                        value={new Date(weather.forecast[selectedDay].sunrise).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
+                        unit="h"
+                        icon={<Sunrise size={13}/>}
+
+                        />
+                        <DetailCard
+                        label="Sunset"
+                        color="orange"
+                        value={ new Date(weather.forecast[selectedDay].sunset).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
+                        unit="h"
+                        icon={<Sunset size={13}/>}
+
+                        />
+                        <DetailCard
+                        label="Sunshine"
+                        value={(weather.forecast[selectedDay].daylight_duration / 3600).toFixed(2)}
+                        unit="h"
+                        color="amber"
+                        icon={<Clock size={13} />}
+                        />
+                        <DetailCard 
+                        label="Pressure"
+                        icon={<Gauge size={13}/>}
+                        color="indigo"
+                        unit="hPa"
+                        value={weather.forecast[selectedDay].pressure}
+                        />
+                        
+                        
+                    </div>
+                    <h1 className="text-xl">Temperature</h1>
+                    <div className="w-full p-4  flex  gap-4 overflow-auto">
+                    {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
+                            .map((hour, index) => {
+                                const i = 24 * selectedDay + index;
+                                return (
+                                <Card index={i}/>
+                                );
+                            })}
+                    </div>
+                    <h1 className="text-xl">Wind</h1>
+                    <div className="w-full p-2  flex  gap-4 overflow-auto">
+                    {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
+                            .map((hour, index) => {
+                                const i = 24 * selectedDay + index;
+
+                                console.log(hour.time);
+                                console.warn(i);
+
+                                return (
+                                <WindCard
+                                speed={weather.hourly[i].wind_speed}
+                                time={weather.hourly[i].time}
+                                direction={weather.hourly[i].wind_direction}
+                                unit={windUnit}
+                                />
+                                );
+                            })}
+                    </div>
+                </div>
+                     
+            </Glass1>
+        )
+    }
   const bgImage = customTheme === "custom" && customBackground
   ? customBackground
   : weather?.data?.current
     ? getWeatherConditionBackground(weather.data.current.weather_code)
     : "/weather/background/cloud.jpg";
+   
     return(
         <>
         
@@ -257,7 +372,9 @@ export default function Weather(){
                     
                 }}>
                 <Header searching={searching} setSearching={setSearching} newCity={newCity} setNewCity={setNewCity} fetchedCities={fetchedCities} handleCityAdd={handleCityAdd} selectCity={selectCity}/>
-            
+            {detailsOpen && savedWeather &&(
+                <WeatherDetails data={savedWeather}/>
+            )}
             <CenterAll>
                     <h1 className="font-bold text-2xl text-white">{selectCity.name},<span className=" text-lg text-blue-50"> {selectCity.admin2}</span></h1>
                     <img src={weather?.data.current
@@ -373,67 +490,34 @@ export default function Weather(){
                 </div>
             </Glass1>
             <div className="w-[95vw] grid grid-cols-2 gap-3 my-4 mx-auto" >
-                <Glass1 className="w-full h-36 rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl shadow-xl overflow-hidden relative">
-                    <div className="p-4 flex flex-col justify-between h-full">
-                    <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 flex items-center gap-1.5">
-                        <Gauge size={13} /> Ciśnienie
-                        </span>
-                    </div>
-                    <div className="text-center my-auto">
-                        <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter drop-shadow-md">
-                        {weather?.data?.current?.pressure || "..."}
-                        </span>
-                        <span className="text-xs font-bold text-indigo-300 ml-1 uppercase">hPa</span>
-                    </div>
-                    </div>
-                </Glass1>
-                <Glass1 className="w-full h-36 rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl shadow-xl overflow-hidden relative">
-                    <div className="p-4 flex flex-col justify-between h-full">
-                    <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-300/20 text-yellow-300 border-yellow-300/30 flex items-center gap-1.5">
-                        <Gauge size={13} /> Wiatr
-                        </span>
-                    </div>
-                    <div className="text-center my-auto">
-                        <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter drop-shadow-md">
-                        {weather?.data.current.wind.direction || "..."}°
-                        </span>
-                        <span className="text-xs font-bold text-yellow-300 ml-1 uppercase">{getWindDirection(weather?.data.current.wind.direction)}</span>
-                    </div>
-                    </div>
-                </Glass1>
-                <Glass1 className="w-full h-36 rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl shadow-xl overflow-hidden relative">
-                    <div className="p-4 flex flex-col justify-between h-full">
-                    <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-200 border border-red-500/30 flex items-center gap-1.5">
-                        <Thermometer size={13} /> Odczuwalna
-                        </span>
-                    </div>
-                    <div className="text-center my-auto">
-                        <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter drop-shadow-md">
-                        {weather?.data?.current?.feels_like || "..."}°C
-                        </span>
-                        <span className="text-xs font-bold text-indigo-300 ml-1 uppercase"></span>
-                    </div>
-                    </div>
-                </Glass1>
-                <Glass1 className="w-full h-36 rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl shadow-xl overflow-hidden relative">
-                    <div className="p-4 flex flex-col justify-between h-full">
-                    <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-200 border border-blue-500/30 flex items-center gap-1.5">
-                        <CloudRainWind size={13} /> Deszcz
-                        </span>
-                    </div>
-
-                    <div className="text-center my-auto">
-                        <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter drop-shadow-md">
-                        {weather?.data?.forecast?.[0]?.precipitation_probability ?? "..."}
-                        </span>
-                        <span className="text-xs font-bold text-blue-300 ml-1 uppercase">%</span>
-                    </div>
-                    </div>
-                </Glass1>
+                <DetailCard 
+                label="Pressure"
+                icon={<Gauge size={13}/>}
+                color="indigo"
+                unit="hPa"
+                value={weather?.data.current.pressure}
+                />
+                <DetailCard 
+                label="Wind"
+                icon={<Wind size={13}/>}
+                color="yellow"
+                unit={getWindDirection(weather?.data.current.wind.direction)}
+                value={weather?.data.current.wind.direction }
+                />
+                <DetailCard
+                label="Feels like"
+                icon={<Thermometer size={13}/>}
+                color="red"
+                unit="°C"
+                value={weather?.data?.current?.feels_like}
+                />
+                <DetailCard
+                label="Rain"
+                icon={<CloudRain size={13}/>}
+                color="blue"
+                unit="%"
+                value={weather?.data?.forecast?.[0]?.precipitation_probability}
+                />
 
             </div>
         </main>

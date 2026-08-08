@@ -59,6 +59,7 @@ class WeatherResource extends JsonResource
                         'precipitation_probability' => $this['hourly']['precipitation_probability'][$index],
                         'wind_speed' => $this['hourly']['wind_speed_10m'][$index],
                         'precipation' =>$this['hourly']['precipitation'][$index],
+                        'wind_direction' => $this['hourly']['wind_direction_10m'][$index],
                     ];
                 })
                 ->values(),
