@@ -142,7 +142,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                     </a>
 
                                     <a
-                                        href="https://filecloud.ct8.pl"
+                                        href="https://filecloud.ct8.pl/dashboard"
                                         className="flex items-center gap-3 p-2 rounded-2xl bg-black/20 hover:bg-black/40 border border-white/10 transition-all text-white text-left"
                                     >
                                         <img src="icons/versec192.jpg" alt="Aplikacja 2" className="w-9 h-9 rounded-xl object-cover border border-white/10" />
@@ -152,7 +152,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                         </div>
                                     </a>
                                      <a
-                                        href="https://filecloud.ct8.pl"
+                                        href="https://filecloud.ct8.pl/"
                                         className="flex items-center gap-3 p-2 rounded-2xl bg-black/20 hover:bg-black/40 border border-white/10 transition-all text-white text-left"
                                     >
                                         <img src="icons/versechealth.png" alt="Aplikacja 2" className="w-9 h-9 rounded-xl object-cover border border-white/10" />
