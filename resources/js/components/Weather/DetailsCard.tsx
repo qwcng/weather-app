@@ -4,8 +4,8 @@ import { Glass1 } from '../utils/Morphisim';
 
 type DetailCardProps ={
   label: string;
-  value?: string | number | null;
-  unit?: string;
+  value?: string |React.ReactNode | number | null;
+  unit?: string |React.ReactNode;
   color?:string;
   icon?: React.ReactNode;
 }
@@ -21,7 +21,8 @@ export default function DetailCard({
     <Glass1 className="w-full h-36 rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl shadow-xl overflow-hidden relative">
       <div className="p-4 flex flex-col justify-between h-full">
         <div className="flex items-center justify-between">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold bg-${color}-500/20 text-${color}-200 border border-${color}-500/30 flex items-center gap-1.5`}>
+          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold bg-${color}-500/20 text-${color}-200 border border-${color}-500/30 flex items-center gap-1.5`}
+                >
             {icon}
             {label}
           </span>

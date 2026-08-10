@@ -54,8 +54,9 @@ class WeatherService{
                 'daylight_duration',
                 'sunshine_duration',
                 'precipitation_probability_max',
-                
                 'wind_speed_10m_max',
+                'uv_index_max',
+                'pressure_msl_mean'
             ]),
 
             'forecast_days' => 14,

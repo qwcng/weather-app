@@ -78,6 +78,8 @@ class WeatherResource extends JsonResource
                         'sunshine_duration' => $this['daily']['sunshine_duration'][$index],
                         'precipitation_probability' => $this['daily']['precipitation_probability_max'][$index],
                         'wind_speed' => $this['daily']['wind_speed_10m_max'][$index],
+                        'pressure' => $this['daily']['pressure_msl_mean'][$index],  
+                        'uv_index' => $this['daily']['uv_index_max'][$index],
                         // 'precipation' =>$this['daily']['precipitation'][$index],
                     ];
                 })

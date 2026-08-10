@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import axios from "axios";
 // import {Header} from '@/components/Header'
-import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1, Thermometer, Gauge, Navigation, CloudRainWind, CloudRain, ArrowUpRightIcon, PinIcon, LocateIcon, HelpCircle, Sunrise, Sunset, Clock } from "lucide-react";
+import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1, Thermometer, Gauge, Navigation, CloudRainWind, CloudRain, ArrowUpRightIcon, PinIcon, LocateIcon, HelpCircle, Sunrise, Sunset, Clock, ShieldAlert, Share2, Save, ShareIcon } from "lucide-react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { CenterAll, CenterRow, CenterX, CenterY } from "@/components/utils/Center";
 import { Glass1, GlassDark } from "@/components/utils/Morphisim";
@@ -14,6 +14,7 @@ import { Navbar } from "@/components/Navbar/Navbar";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {ResponsiveContainer,AreaChart,Area,XAxis,YAxis,Tooltip,CartesianGrid,} from "recharts";
 import DetailCard, { WindCard } from "@/components/Weather/DetailsCard";
+import { WeatherDetails } from "@/components/Weather/WeatherDetails";
 const defaultCity = {
     id:756135,
     name:"Warszawa",
@@ -42,6 +43,24 @@ export default function Weather(){
     function normalize(a,b){
         return (Math.abs(a - b) <=0.02)
     }
+    async function saveToVersecDrive() {
+  try {
+    const payload = {
+      cityName: selectCity.name,
+      adminRegion: selectCity.admin2,
+      currentWeather: weather?.data?.current,
+      forecast: weather?.data?.forecast,
+      timeFormat: timeFormat,
+      temperatureUnit: temperatureUnit,
+    };
+    const response = await axios.post("/saveToVersecDrive", payload);
+    if (response.data.success) {
+      alert("success");
+    }
+  } catch(error){
+    alert("error");
+  }
+}
     useEffect(()=>{
         async function fetchWeather(){
             
@@ -254,108 +273,7 @@ export default function Weather(){
     if (degrees >= 247.5 && degrees < 292.5) return "W";
     if (degrees >= 292.5 && degrees < 337.5) return "NW";
   }
-   function WeatherDetails({data}){
-    // console.log(data.data.data)
-    const weather = data?.data?.data;
-    const weatherDate = new Date(weather?.forecast[0]?.date)
-    // console.log(24*1 + 23)
-    for(let i=24*selectedDay; i<=24*selectedDay + 23; i++){
-        console.log(weather.hourly[i].time)
-        console.warn(i)
-    }
-
-        return(
-             <Glass1 className="min-h-full w-full fixed inset-0  overflow-y-auto top-0 z-100  rounded-2xl">
-              <div className=" text-white relative p-5 flex flex-row w-full align-center justify-evenly ">
-                <button 
-                onClick={closeDetails}
-                className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
-                    <ArrowLeft className="text-white"/>
-                </button>
-                <button  className="h-12 w-fit rounded-4xl  flex items-center justify-center  border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
-                     <span>{weatherDate.toLocaleDateString('pl-PL', {
-                            weekday: 'long',
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric',
-                        })}</span>
-                </button>
-                <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
-                    <HelpCircle className="text-white"/>
-                </button>
-                 </div>
-                <div className="font-bold p-2">
-                    <h1 className="text-2xl">
-                        Weather Details
-                    </h1>
-                    <div className="w-[95vw] grid grid-cols-2 gap-3 my-4 mx-auto" >
-                        <DetailCard
-                        label="Sunrise"
-                        color="orange"
-                        value={new Date(weather.forecast[selectedDay].sunrise).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
-                        unit="h"
-                        icon={<Sunrise size={13}/>}
-
-                        />
-                        <DetailCard
-                        label="Sunset"
-                        color="orange"
-                        value={ new Date(weather.forecast[selectedDay].sunset).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
-                        unit="h"
-                        icon={<Sunset size={13}/>}
-
-                        />
-                        <DetailCard
-                        label="Sunshine"
-                        value={(weather.forecast[selectedDay].daylight_duration / 3600).toFixed(2)}
-                        unit="h"
-                        color="amber"
-                        icon={<Clock size={13} />}
-                        />
-                        <DetailCard 
-                        label="Pressure"
-                        icon={<Gauge size={13}/>}
-                        color="indigo"
-                        unit="hPa"
-                        value={weather.forecast[selectedDay].pressure}
-                        />
-                        
-                        
-                    </div>
-                    <h1 className="text-xl">Temperature</h1>
-                    <div className="w-full p-4  flex  gap-4 overflow-auto">
-                    {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
-                            .map((hour, index) => {
-                                const i = 24 * selectedDay + index;
-                                return (
-                                <Card index={i}/>
-                                );
-                            })}
-                    </div>
-                    <h1 className="text-xl">Wind</h1>
-                    <div className="w-full p-2  flex  gap-4 overflow-auto">
-                    {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
-                            .map((hour, index) => {
-                                const i = 24 * selectedDay + index;
-
-                                console.log(hour.time);
-                                console.warn(i);
-
-                                return (
-                                <WindCard
-                                speed={weather.hourly[i].wind_speed}
-                                time={weather.hourly[i].time}
-                                direction={weather.hourly[i].wind_direction}
-                                unit={windUnit}
-                                />
-                                );
-                            })}
-                    </div>
-                </div>
-                     
-            </Glass1>
-        )
-    }
+   
   const bgImage = customTheme === "custom" && customBackground
   ? customBackground
   : weather?.data?.current
@@ -373,7 +291,7 @@ export default function Weather(){
                 }}>
                 <Header searching={searching} setSearching={setSearching} newCity={newCity} setNewCity={setNewCity} fetchedCities={fetchedCities} handleCityAdd={handleCityAdd} selectCity={selectCity}/>
             {detailsOpen && savedWeather &&(
-                <WeatherDetails data={savedWeather}/>
+                <WeatherDetails data={savedWeather} closeDetails={closeDetails} selectedDay={selectedDay}/>
             )}
             <CenterAll>
                     <h1 className="font-bold text-2xl text-white">{selectCity.name},<span className=" text-lg text-blue-50"> {selectCity.admin2}</span></h1>
@@ -518,7 +436,10 @@ export default function Weather(){
                 unit="%"
                 value={weather?.data?.forecast?.[0]?.precipitation_probability}
                 />
-
+                    <Glass1 className="p-2 w-74 h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
+                    <CenterRow><button onClick={() => saveToVersecDrive()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Eksportuj do Versec Drive</span><Save className="inline-block"/></button></CenterRow>                    
+                            {/* <button className="mt-2"></button> */}
+                </Glass1>
             </div>
         </main>
         
