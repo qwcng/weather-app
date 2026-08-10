@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\VersecController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,9 @@ Route::get('/profile', function () {
 })->name('home/settings');
 Route::get('/auth/versec', [VersecController::class, 'redirect'])->name('versec.redirect'); 
 Route::get('/auth/versec/callback', [VersecController::class, 'callback']);
-
+Route::middleware(['auth'])->group(function () {
+Route::post('/saveToVersecDrive',[ExportController::class, 'saveToVersecDrive']);
+});
 
 
 // Route::middleware(['auth'])->group(function () {

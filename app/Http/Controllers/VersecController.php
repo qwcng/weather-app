@@ -22,6 +22,7 @@ class VersecController extends Controller
         ], [
             'name' => $versecUser->name,
             'password' => bcrypt(\Illuminate\Support\Str::random(16)),
+            'versec_token' => $versecUser->token,
         ]);
 
         Auth::login($user, true);

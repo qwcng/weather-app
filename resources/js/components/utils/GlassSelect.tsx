@@ -16,7 +16,7 @@ export function GlassSelect({ value, onChange, options }: SelectProps) {
             >
                 {options.map((option) => (
                     <option
-                        key={option}
+                        key={option.value}
                         value={option.value}
                         className="text-black"
                     >

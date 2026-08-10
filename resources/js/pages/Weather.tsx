@@ -15,6 +15,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {ResponsiveContainer,AreaChart,Area,XAxis,YAxis,Tooltip,CartesianGrid,} from "recharts";
 import DetailCard, { WindCard } from "@/components/Weather/DetailsCard";
 import { WeatherDetails } from "@/components/Weather/WeatherDetails";
+import { Toast } from "@/components/Toaster";
+import { usePage } from "@inertiajs/react";
 const defaultCity = {
     id:756135,
     name:"Warszawa",
@@ -39,25 +41,40 @@ export default function Weather(){
     const [customBackground,setCustomBackground] =useLocalStorage('background',null);
     const [detailsOpen,setDetailsOpen] = useState(false);
     const [selectedDay, setSelectedDay] = useState(1);
-
+    const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+    const { auth } = usePage().props as any;
+    const showToast = (message, type = "success") => {
+        setToast({ show: true, message, type });
+        setTimeout(() => {
+            setToast((prev) => ({ ...prev, show: false }));
+        }, 4000);
+    };
     function normalize(a,b){
         return (Math.abs(a - b) <=0.02)
     }
     async function saveToVersecDrive() {
-  try {
-    const payload = {
-      cityName: selectCity.name,
-      adminRegion: selectCity.admin2,
-      currentWeather: weather?.data?.current,
-      forecast: weather?.data?.forecast,
-      timeFormat: timeFormat,
-      temperatureUnit: temperatureUnit,
-    };
-    const response = await axios.post("/saveToVersecDrive", payload);
-    if (response.data.success) {
-      alert("success");
-    }
-  } catch(error){
+    try {
+        if(auth?.user == undefined){
+            showToast("You must be logged in to save to Versec Drive", "error");
+            return;
+        }
+        showToast("Generowanie raportu...", "loading");
+        const payload = {
+        cityName: selectCity.name,
+        adminRegion: selectCity.admin2,
+        currentWeather: weather?.data?.current,
+        forecast: weather?.data?.forecast,
+        hourly: weather?.data?.hourly,
+        timeFormat: timeFormat,
+        temperatureUnit: temperatureUnit,
+        };
+        const response = await axios.post("/saveToVersecDrive", payload);
+        if (response.data?.original?.success || response.data?.success) {
+            showToast("Raport został wygenerowany. Przejdź do Versec Drive, aby wyswietlić", "success");
+        } else {
+            showToast("Nie udało się wygenerować raportu", "error");
+        }
+    } catch(error){
     alert("error");
   }
 }
@@ -282,7 +299,9 @@ export default function Weather(){
    
     return(
         <>
-        
+        <AnimatePresence>
+                <Toast toast={toast} onClose={() => setToast((prev) => ({ ...prev, show: false }))} />
+        </AnimatePresence>
         <main className={` backdrop-brightness-[10%] bg-cover bg-fixed bg-center bg-no-repeat  min-h-dvh pb-24`}
                 style={{
                     
@@ -293,6 +312,7 @@ export default function Weather(){
             {detailsOpen && savedWeather &&(
                 <WeatherDetails data={savedWeather} closeDetails={closeDetails} selectedDay={selectedDay}/>
             )}
+            
             <CenterAll>
                     <h1 className="font-bold text-2xl text-white">{selectCity.name},<span className=" text-lg text-blue-50"> {selectCity.admin2}</span></h1>
                     <img src={weather?.data.current

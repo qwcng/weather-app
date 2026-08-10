@@ -1,3 +1,4 @@
+import { Toast } from "@/components/Toaster";
 import { CenterRow } from "@/components/utils/Center";
 import { GlassSelect } from "@/components/utils/GlassSelect";
 import { Glass1, GlassDark } from "@/components/utils/Morphisim";
@@ -17,6 +18,7 @@ export default function Profile(){
     const [timeFormat, setTimeFormat] = useLocalStorage("time", "24h");
     const [customTheme,setCustomTheme] =useLocalStorage('theme','default');
     const [customBackground,setCustomBackground] =useLocalStorage('background',null);
+    const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
     const handleImageUpload = (e) => {
         const file = e.target.files?.[0];
@@ -26,11 +28,21 @@ export default function Profile(){
         reader.onloadend = () => setCustomBackground(reader.result);
         reader.readAsDataURL(file);
     };
+    const showToast = (message, type = "success") => {
+        setToast({ show: true, message, type });
+        setTimeout(() => {
+            setToast((prev) => ({ ...prev, show: false }));
+        }, 4000);
+    };
      const bgImage = customTheme === "custom" && customBackground
   ? customBackground
   :  "/weather/background/cloud.jpg";
     // console.log(temperatureUnit)
     return (
+        <>
+          <AnimatePresence>
+                <Toast toast={toast} onClose={() => setToast((prev) => ({ ...prev, show: false }))} />
+        </AnimatePresence>
         <main className="relative h-dvh   overflow-hidden bg-center bg-cover"
                 style={{
                     backgroundImage: `url(${bgImage})`
@@ -172,7 +184,10 @@ export default function Profile(){
                 </div>
                 
                     <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
-                        <CenterRow><button onClick={() => window.location.reload()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Odśwież</span><RefreshCcwDot className="inline-block"/></button></CenterRow>                    
+                        <CenterRow><button onClick={() =>{
+                            showToast("Refreshing page...", "loading");
+                            window.location.reload()
+                        } } className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Odśwież</span><RefreshCcwDot className="inline-block"/></button></CenterRow>                    
                             {/* <button className="mt-2"></button> */}
                     </Glass1>
                     {user ? (
@@ -180,13 +195,17 @@ export default function Profile(){
                             <CenterRow>
                                 <span className="flex flex-row items-center gap-2 text-sm">
                                     <UserIcon className="h-4 w-4 inline-block" />
-                                    Zalogowano jako: <strong className="text-white font-bold">{user.name || user.email}</strong>
+                                    Loged in as: <strong className="text-white font-bold">{user.name || user.email}</strong>
                                 </span>
                             </CenterRow>
                         </Glass1>
                     ) : (
                         <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10 bg-brown-900/10 backdrop-blur-[3px] font-semibold">
-                            <CenterRow><button onClick={() => window.location.href='/login'} className="flex flex-row items-center justify-center gap-2 text-center mx-auto"><span>Zaloguj się</span><LogIn className="inline-block"/></button></CenterRow>                    
+                            <CenterRow><button onClick={() =>{
+                            showToast("Logging in...", "loading");
+                            window.location.reload()}
+                        }
+                             className="flex flex-row items-center justify-center gap-2 text-center mx-auto"><span>Log in</span><LogIn className="inline-block"/></button></CenterRow>                    
                         </Glass1>
                     )}
 
@@ -196,5 +215,6 @@ export default function Profile(){
           
 
         </main>
+        </>
     );
 }

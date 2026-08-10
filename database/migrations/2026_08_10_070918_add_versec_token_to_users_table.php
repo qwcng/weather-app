@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('versec_id')->nullable()->after('id')->unique();
-            $table->string('password')->nullable()->change();
+            $table->text('versec_token')->nullable()->after('remember_token');
         });
     }
 
@@ -23,7 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('versec_id');
+            $table->dropColumn('versec_token');
+            //
         });
     }
 };

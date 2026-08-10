@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'versec_id',
+        'versec_token',
     ];
 
     /**
