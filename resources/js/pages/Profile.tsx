@@ -203,7 +203,7 @@ export default function Profile(){
                         <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10 bg-brown-900/10 backdrop-blur-[3px] font-semibold">
                             <CenterRow><button onClick={() =>{
                             showToast("Logging in...", "loading");
-                            window.location.reload()}
+                            window.location.href = "/login"}
                         }
                              className="flex flex-row items-center justify-center gap-2 text-center mx-auto"><span>Log in</span><LogIn className="inline-block"/></button></CenterRow>                    
                         </Glass1>
