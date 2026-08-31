@@ -302,15 +302,14 @@ export default function Weather(){
         <AnimatePresence>
                 <Toast toast={toast} onClose={() => setToast((prev) => ({ ...prev, show: false }))} />
         </AnimatePresence>
-        <main className={` backdrop-brightness-[10%] bg-cover bg-fixed bg-center bg-no-repeat  min-h-dvh pb-24`}
-                style={{
-                    
-                    backgroundImage: `url(${bgImage})`
-                    
-                }}>
+        <div 
+                className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat w-full h-full min-h-screen"
+                style={{ backgroundImage: `url(${bgImage})` }}
+            />
+      <main className="min-h-screen pb-24">
                 <Header searching={searching} setSearching={setSearching} newCity={newCity} setNewCity={setNewCity} fetchedCities={fetchedCities} handleCityAdd={handleCityAdd} selectCity={selectCity}/>
             {detailsOpen && savedWeather &&(
-                <WeatherDetails data={savedWeather} closeDetails={closeDetails} selectedDay={selectedDay}/>
+                <WeatherDetails  isOpen={detailsOpen} data={savedWeather} closeDetails={closeDetails} selectedDay={selectedDay}/>
             )}
             
             <CenterAll>
@@ -361,6 +360,7 @@ export default function Weather(){
                         })}
                         
 
+                        
                         
                         
                         

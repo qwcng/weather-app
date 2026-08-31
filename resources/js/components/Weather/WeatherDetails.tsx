@@ -2,9 +2,12 @@ import { ArrowLeft, Clock, Gauge, HelpCircle, ShieldAlert, Sunrise, Sunset } fro
 import { Glass1 } from "../utils/Morphisim";
 import DetailCard, { WindCard } from "./DetailsCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Drawer, DrawerOverlay, DrawerPortal } from "@/components/ui/drawer";
+import { DrawerContent } from "../ui/drawer";
 
 
-export function WeatherDetails({data,closeDetails, selectedDay  }){
+
+export function WeatherDetails({data,isOpen,closeDetails, selectedDay  }){
     // console.log(data.data.data)
     const[windUnit,setWindUnit]= useLocalStorage('wind_unit','km/h  ')
     const weather = data?.data?.data;
@@ -22,7 +25,13 @@ export function WeatherDetails({data,closeDetails, selectedDay  }){
     return { label: "Bardzo wysoki", color: "red" };
     }
         return(
-             <Glass1 className="min-h-full w-full fixed inset-0  overflow-y-auto top-0 z-100  rounded-2xl">
+            <>
+            <Drawer open={isOpen} onOpenChange={(open) => !open && closeDetails()} >
+            <DrawerPortal>
+                <DrawerOverlay className="bg-transparent"/>
+                <DrawerContent className="!bg-transparent border-none shadow-none p-0 max-h-[90vh]">
+                
+             <Glass1 className="w-full border-white/15 rounded-2xl flex flex-col justify-between items-center p-2.5 bg-white/10 text-white backdrop-blur-md shadow-md  hover:bg-white/15 transition-all overflow-y-auto">
               <div className=" text-white relative p-5 flex flex-row w-full align-center justify-evenly ">
                 <button 
                 onClick={closeDetails}
@@ -98,7 +107,7 @@ export function WeatherDetails({data,closeDetails, selectedDay  }){
                             })} */}
                     </div>
                     <h1 className="text-xl">Wind</h1>
-                    <div className="w-full p-2  flex  gap-4 overflow-auto">
+                    <div className="w-full max-w-full p-2  flex  gap-4 overflow-x-auto">
                     {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
                             .map((hour, index) => {
                                 const i = 24 * selectedDay + index;
@@ -119,5 +128,9 @@ export function WeatherDetails({data,closeDetails, selectedDay  }){
                 </div>
                      
             </Glass1>
+            </DrawerContent>
+            </DrawerPortal>
+            </Drawer>
+        </>
         )
     }
