@@ -1,13 +1,14 @@
-import { ArrowLeft, Clock, Gauge, HelpCircle, ShieldAlert, Sunrise, Sunset } from "lucide-react";
+import { ArrowLeft, Clock, Gauge, HelpCircle, ShieldAlert, Sunrise, Sunset, X, XCircle } from "lucide-react";
 import { Glass1 } from "../utils/Morphisim";
 import DetailCard, { WindCard } from "./DetailsCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Drawer, DrawerOverlay, DrawerPortal } from "@/components/ui/drawer";
 import { DrawerContent } from "../ui/drawer";
+import { Card } from "./WeatherCard";
 
 
 
-export function WeatherDetails({data,isOpen,closeDetails, selectedDay  }){
+export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeatherConditionIcon  }){
     // console.log(data.data.data)
     const[windUnit,setWindUnit]= useLocalStorage('wind_unit','km/h  ')
     const weather = data?.data?.data;
@@ -29,14 +30,14 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay  }){
             <Drawer open={isOpen} onOpenChange={(open) => !open && closeDetails()} >
             <DrawerPortal>
                 <DrawerOverlay className="bg-transparent"/>
-                <DrawerContent className="!bg-transparent border-none shadow-none p-0 max-h-[90vh]">
+                <DrawerContent className="!bg-transparent border-none shadow-none p-0 max-w-full max-h-[90vh] overflow-hidden">
                 
-             <Glass1 className="w-full border-white/15 rounded-2xl flex flex-col justify-between items-center p-2.5 bg-white/10 text-white backdrop-blur-md shadow-md  hover:bg-white/15 transition-all overflow-y-auto">
+             <Glass1 className="w-full max-w-full border-white/15 rounded-2xl flex flex-col justify-between items-center p-2.5 bg-white/10 text-white backdrop-blur-md shadow-md  hover:bg-white/15 transition-all overflow-y-auto overflow-x-hidden">
               <div className=" text-white relative p-5 flex flex-row w-full align-center justify-evenly ">
                 <button 
                 onClick={closeDetails}
                 className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
-                    <ArrowLeft className="text-white"/>
+                    <X className="text-white"/>
                 </button>
                 <button  className="h-12 w-fit rounded-4xl  flex items-center justify-center  border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
                      <span>{weatherDate.toLocaleDateString('pl-PL', {
@@ -50,11 +51,11 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay  }){
                     <HelpCircle className="text-white"/>
                 </button>
                  </div>
-                <div className="font-bold p-2">
+                <div className="font-bold p-2 w-full min-w-0">
                     <h1 className="text-2xl">
                         Weather Details
                     </h1>
-                    <div className="w-[95vw] grid grid-cols-2 gap-3 my-4 mx-auto" >
+                    <div className="w-full grid grid-cols-2 gap-3 my-4 mx-auto" >
                         <DetailCard
                         label="Sunrise"
                         color="orange"
@@ -97,17 +98,17 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay  }){
                         
                     </div>
                     <h1 className="text-xl">Temperature</h1>
-                    <div className="w-full p-4  flex  gap-4 overflow-auto">
-                    {/* {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
+                    <div className="w-full min-w-0 p-4  flex  gap-4 overflow-x-auto">
+                    {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
                             .map((hour, index) => {
                                 const i = 24 * selectedDay + index;
                                 return (
-                                <Card index={i}/>
+                                <Card weather={data.data} index={i} getWeatherConditionIcon={getWeatherConditionIcon}/>
                                 );
-                            })} */}
+                            })}
                     </div>
                     <h1 className="text-xl">Wind</h1>
-                    <div className="w-full max-w-full p-2  flex  gap-4 overflow-x-auto">
+                    <div className="w-full min-w-0 max-w-full p-2  flex  gap-4 overflow-x-auto">
                     {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
                             .map((hour, index) => {
                                 const i = 24 * selectedDay + index;
