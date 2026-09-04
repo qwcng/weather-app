@@ -14,7 +14,7 @@ export function GlassSelect({ value, onChange, options }: SelectProps) {
                 onChange={(e) => onChange(e.target.value)}
                className="appearance-none w-full h-12 px-5 pr-12 rounded-4xl bg-gray-600/40 backdrop-blur-xl border border-white/20 text-white font-semibold outline-none cursor-pointer focus:ring-2 focus:ring-white/30"
             >
-                {options.map((option) => (
+                {options.map((option:any) => (
                     <option
                         key={option.value}
                         value={option.value}

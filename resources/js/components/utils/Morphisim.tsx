@@ -14,7 +14,7 @@ export function Glass1({children,className}: Props){
         </div>
     )
 }
-export function GlassDark({children,className}){
+export function GlassDark({children,className}:Props){
 
     return(
         <div className={cn(" bg-gray-600  bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-30",className)}>

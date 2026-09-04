@@ -1,8 +1,14 @@
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Droplets, LoaderCircle, Navigation, Wind } from "lucide-react";
 
+
+type CardProp ={
+    weather:any,
+    index:number,
+    getWeatherConditionIcon: (value:number)=>string,
+}
    
-export function Card({weather, index, getWeatherConditionIcon,}){
+export function Card({weather, index, getWeatherConditionIcon}:CardProp){
 
         const day =new Date(weather?.data?.hourly[index]?.time).toLocaleDateString("pl-PL", { weekday:"short" });
         const time = new Date(weather?.data?.hourly[index]?.time).toLocaleTimeString('pl-PL',{

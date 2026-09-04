@@ -6,9 +6,15 @@ import { Drawer, DrawerOverlay, DrawerPortal } from "@/components/ui/drawer";
 import { DrawerContent } from "../ui/drawer";
 import { Card } from "./WeatherCard";
 
+type WeatherDetailsProp ={
+    data:any,
+    isOpen:boolean,
+    closeDetails:()=>void,
+    selectedDay:any,
+    getWeatherConditionIcon: (value:number)=>string
+}
 
-
-export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeatherConditionIcon  }){
+export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeatherConditionIcon  }:WeatherDetailsProp){
     // console.log(data.data.data)
     const[windUnit,setWindUnit]= useLocalStorage('wind_unit','km/h  ')
     const weather = data?.data?.data;
@@ -19,7 +25,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
         console.warn(i)
     }
 
-    function getUvLevel(uv) {
+    function getUvLevel(uv:number) {
     if (uv <= 2) return { label: "Niski", color: "green" };
     if (uv <= 5) return { label: "Umiarkowany", color: "yellow" };
     if (uv <= 7) return { label: "Wysoki", color: "orange" };
@@ -100,7 +106,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                     <h1 className="text-xl">Temperature</h1>
                     <div className="w-full min-w-0 p-4  flex  gap-4 overflow-x-auto">
                     {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
-                            .map((hour, index) => {
+                            .map((hour:number, index:number) => {
                                 const i = 24 * selectedDay + index;
                                 return (
                                 <Card weather={data.data} index={i} getWeatherConditionIcon={getWeatherConditionIcon}/>
@@ -110,18 +116,15 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                     <h1 className="text-xl">Wind</h1>
                     <div className="w-full min-w-0 max-w-full p-2  flex  gap-4 overflow-x-auto">
                     {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
-                            .map((hour, index) => {
+                            .map((hour:number, index:number) => {
                                 const i = 24 * selectedDay + index;
-
-                                console.log(hour.time);
-                                console.warn(i);
 
                                 return (
                                 <WindCard
                                 speed={weather.hourly[i].wind_speed}
                                 time={weather.hourly[i].time}
                                 direction={weather.hourly[i].wind_direction}
-                                unit={windUnit}
+                                windUnit={windUnit}
                                 />
                                 );
                             })}

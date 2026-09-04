@@ -27,6 +27,9 @@ const defaultCity = {
     admin1:"Województwo mazowieckie",
     admin2:"Warszaw",
 };
+type WeatherConditionsProps ={
+    code:number,
+}
 export default function Weather(){
     const[newCity,setNewCity] = useState("");
     const[weather,setWeather]= useState(null);
@@ -135,21 +138,21 @@ export default function Weather(){
         console.log(`dodano ${newCity}`);
         
     }
-    function formatDuration(time){
+    function formatDuration(time:number){
         const hours = Math.floor(time/3600);
         const minutes = Math.floor((time%3600)/60);
         return `${hours}h ${minutes}m`;
     }
-    function getWeatherConditionIcon(code) {
+    function getWeatherConditionIcon(code:number) {
 
         return weatherMap[code]?.icon || "/weather/cloud.png";
     };
-    function getWeatherConditionBackground(code) {
+    function getWeatherConditionBackground(code:number) {
 
         if(!weatherMap[code]?.background) return "/weather/background/cloud.jpg";
         else return weatherMap[code]?.background;
     };
-    function getWeatherConditionLabel(code) {
+    function getWeatherConditionLabel(code:number) {
 
         return weatherMap[code]?.name || "/weather/cloud.png";
     };
@@ -249,7 +252,7 @@ export default function Weather(){
       rain: item.precipation,
     };
   }) || []
-  function getWindDirection(degrees){
+  function getWindDirection(degrees:number){
     if (degrees >= 337.5 || degrees < 22.5) return "N";
     if (degrees >= 22.5 && degrees < 67.5) return "NE";
     if (degrees >= 67.5 && degrees < 112.5) return "E";

@@ -7,9 +7,9 @@ type Header={
     searching: boolean;
     setSearching:(bool:boolean)=>void;
     newCity: any;
-    setNewCity: ()=>void;
+    setNewCity: (value:any)=>void;
     fetchedCities: any;
-    handleCityAdd: ()=>void;
+    handleCityAdd: (value:any)=>void;
     selectCity:any;
 
 

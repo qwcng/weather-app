@@ -9,7 +9,14 @@ type DetailCardProps ={
   color?:string;
   icon?: React.ReactNode;
 }
+type WindCardProp={
+  time:string,
+  speed:number,
+  direction:number,
+  windUnit?:string,
 
+}
+// { time, speed, direction, windUnit = "km/h" }
 export default function DetailCard({
   label,
   value,
@@ -41,8 +48,8 @@ export default function DetailCard({
     </Glass1>
   );
 }
-export function WindCard({ time, speed, direction, windUnit = "km/h" }) {
-  function getWindDirection(degrees) {
+export function WindCard({ time, speed, direction, windUnit = "km/h" }:WindCardProp) {
+  function getWindDirection(degrees:number) {
     if (degrees === undefined || degrees === null) return "–";
     if (degrees >= 337.5 || degrees < 22.5) return "N";
     if (degrees >= 22.5 && degrees < 67.5) return "NE";

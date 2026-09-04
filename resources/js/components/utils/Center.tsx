@@ -1,6 +1,10 @@
 import { cn } from "@/lib/utils"
-        
-export function CenterAll({children,className}){
+type CenterProp ={
+    children:React.ReactNode,
+    className?:string,
+
+}
+export function CenterAll({children,className}: CenterProp){
 
     return(
         <div className={cn("flex flex-col items-center justify-center w-full h-fit",className)}>
@@ -8,26 +12,26 @@ export function CenterAll({children,className}){
         </div>
     )
 }
-export function CenterRow({children}){
+export function CenterRow({children,className}:CenterProp){
 
     return(
-        <div className="flex flex-row items-center justify-center w-full h-fit">
+        <div className={cn("flex flex-row items-center justify-center w-full h-fit", className)}>
             {children}
         </div>
     )
 }
-export function CenterX({children}){
+export function CenterX({children,className}:CenterProp){
 
     return(
-        <div className="flex flex-row items-start justify-center w-full h-fit">
+        <div className={cn("flex flex-row items-start justify-center w-full h-fit",className)}>
             {children}
         </div>
     )
 }
-export function CenterY({children}){
+export function CenterY({children,className}:CenterProp){
 
     return(
-        <div className="flex flex-row items-center justify-start w-full h-fit">
+        <div className={cn("flex flex-row items-center justify-start w-full h-fit",className)}>
             {children}
         </div>
     )

@@ -3,7 +3,13 @@ import { motion } from "framer-motion";
 import { MapIcon, Settings, Sun } from "lucide-react";
 import { Glass1 } from "../utils/Morphisim";
 
-export function Navbar({active,setActive}) {
+
+
+type Props ={
+    active:string,
+    setActive: (value:string)=>void,
+}
+export function Navbar({active,setActive}: Props) {
     
 
     return (
