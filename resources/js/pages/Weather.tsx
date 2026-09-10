@@ -429,8 +429,7 @@ export default function Weather(){
                 value={weather?.data?.forecast?.[0]?.precipitation_probability}
                 />
                     <Glass1 className="p-2 w-74 h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
-                    <CenterRow><button onClick={() => saveToVersecDrive()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Eksportuj do Versec Drive</span><Save className="inline-block"/></button></CenterRow>                    
-                            {/* <button className="mt-2"></button> */}
+                    <CenterRow><button onClick={() => saveToVersecDrive()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Eksportuj do Versec Drive</span><Save className="inline-block"/></button></CenterRow>
                 </Glass1>
             </div>
         </main>

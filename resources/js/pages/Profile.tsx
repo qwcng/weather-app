@@ -72,7 +72,7 @@ export default function Profile(){
                         opacity: 0,
                     }}
                     className="h-12 w-38 rounded-4xl  flex  items-center justify-center border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
-                        <span className="font-md font-semibold text-white mr-2">Ustawienia</span> 
+                        <span className="font-md font-semibold text-white mr-2">Settings</span> 
                     </motion.button>
                 </AnimatePresence>
 
