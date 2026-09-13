@@ -2,6 +2,7 @@ import { AnimatePresence,motion } from "framer-motion"
 import { ArrowLeft, ChevronDown, LayoutGrid, Plus, Sidebar, X } from "lucide-react"
 import { CenterRow, CenterX } from "../utils/Center"
 import { useState } from "react";
+import { Glass1 } from "../utils/Morphisim";
 
 type Header={
     searching: boolean;
@@ -9,6 +10,8 @@ type Header={
     newCity: any;
     setNewCity: (value:any)=>void;
     fetchedCities: any;
+    favoriteCities: any;
+    setFavoriteCities: (value:any)=>void;
     handleCityAdd: (value:any)=>void;
     selectCity:any;
 
@@ -17,7 +20,7 @@ type Header={
 
 
 
-export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,handleCityAdd, selectCity}: Header){
+export function Header({searching,setSearching,newCity,setNewCity,fetchedCities, favoriteCities,setFavoriteCities, handleCityAdd, selectCity}: Header){
     const [appsOpen, setAppsOpen] = useState(false);
     return(
     <div className=" relative p-5 flex flex-row w-full align-center justify-evenly ">
@@ -33,19 +36,30 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                 className="h-fit w-72 z-50 overflow-hidden rounded-4xl flex-col absolute top-0 origin-top p-4 justify-center items-center bg-gray-600/60 bg-opacity-0 bg-clip-padding backdrop-filter backdrop-blur-xs border-2 border-white/10 shadow-2xl">
                   
                    <button onClick={()=>setSearching(false)} className="flex flex-row"><span className="font-md font-semibold text-white mr-2" >{selectCity.name}</span> <ChevronDown className="text-white"/></button>
-                        <div className="font-md min-h-8 max-h-48 overflow-y-auto w-full flex flex-col justify-between items-center bg-black/10 font-semibold text-white mr-2">                       
+                        <div className="font-md min-h-8 max-h-48 overflow-y-auto w-full flex flex-col  justify-between items-center  font-semibold text-white mr-2">                       
                          {newCity ? (
-                            <div className=" border-2 z-100 pt-2 flex flex-col w-full">
+                            <div className="  z-100 pt-2 flex flex-col w-full gap-2">
                             {fetchedCities 
                                 ?(
                                     fetchedCities.map((city: any)=>{
                                             return(
                                                 <CenterX key={city.name}>
-                                                    <button onClick={()=>handleCityAdd(city)} className="font-md border-2 min-h-10 py-2 w-full flex flex-row justify-between items-center bg-black/30 font-semibold text-white mr-2">
-                                                        
-                                                           <div className="flex flex-row"><span className="font-md font-semibold text-white mr-2">{city.name},{city.admin1}</span> <Plus size={40} className="text-white"/></div>
-                                                        
-                                                    </button>
+                                                   <button
+                                                    className="w-full flex flex-row justify-between items-center rounded-2xl border-2 border-white/10 p-2  click:scale-[0.90] active:bg-black/10 transition-all cursor-pointer group
+                                                                "
+                                                    onClick={() => handleCityAdd(city)}
+                                                >
+                                                    <span
+                                                    className="w-[80%] text-white font-semibold text-left text-ellipsis overflow-hidden whitespace-nowrap"
+                                                   
+                                                    >
+                                                    {city.name}
+                                                    , {city.admin2}
+                                                    </span>
+                                                    
+                                                    <Plus size={16} className="text-white hover:text-red-400" />
+                                                  
+                                                </button>
                                                 </CenterX>                                         
                                             )
                                 })
@@ -63,8 +77,43 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                             :
                             (
                                 <>
-                                    <p>Warszawa,<span className="text-sm">mazowieckie</span></p> <X className="text-white"/>
+                                    {favoriteCities ? (
+                                        favoriteCities.map((city:any)=>{
+                                            return(
+                                                <>
+                                                <div
+                                                    className="w-full flex flex-row justify-between items-center rounded-2xl border-2 border-white/10 p-2"
+                                                >
+                                                    <span
+                                                    className="w-[80%] text-white font-semibold text-left text-ellipsis overflow-hidden whitespace-nowrap"
+                                                    onClick={() => handleCityAdd(city)}
+                                                    >
+                                                    {city.name}
+                                                    , {city.admin2}
+                                                    </span>
+                                                    <button
+                                                    onClick={() => {
+                                                        setFavoriteCities((prevCities) => prevCities.filter((c) => c.id !== city.id));
+                                                    }}
+                                                    className="p-1 hover:text-red-400 transition-colors"
+                                                    >
+                                                    <X size={16} className="text-white hover:text-red-400" />
+                                                    </button>
+                                                </div>
+                                                </>
+                                            )
+                                        }
+                                    )
+                                )
+                                :
+                                (
+                                    <span>Brak ulubionych miejscowości</span>
+                                )
+                                }
                                 </>
+
+                                   
+                                
                                     
                             )
                             }
@@ -72,8 +121,11 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                     
                     
                     <CenterRow>
-                            <div className="bottom-0">
-                                <input type="text" placeholder="Wpisz nazwę miejscowości" value={newCity} onChange={(e) => setNewCity(e.target.value)} />
+                            <div className="bottom-0 flex flex-row items-center justify-center relative w-full">
+                                <input type="text"  className="rounded-2xl border-2 border-white/10 p-2 bg-black/10 backdrop-blur-[3px] font-semibold overflow-hidden" placeholder="Wpisz nazwę miejscowości" value={newCity} onChange={(e) => setNewCity(e.target.value)} />
+                                {newCity && (
+                                    <X className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-white" onClick={() => setNewCity("")} />
+                                )}
                             </div>
                     </CenterRow>
                     

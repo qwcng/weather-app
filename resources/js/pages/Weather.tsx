@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect, use} from "react";
 import axios from "axios";
 // import {Header} from '@/components/Header'
 import { Wind,Droplet, Sun,Clock4,Calendar, ArrowLeft, Sidebar, ArrowDown, ChevronDown, TrashIcon, PlusIcon, LoaderCircle, Trash2Icon, X, Plus, Calendar1Icon, Calendar1, Thermometer, Gauge, Navigation, CloudRainWind, CloudRain, ArrowUpRightIcon, PinIcon, LocateIcon, HelpCircle, Sunrise, Sunset, Clock, ShieldAlert, Share2, Save, ShareIcon, Droplets } from "lucide-react";
@@ -36,6 +36,7 @@ export default function Weather(){
     const[searching,setSearching]= useState(false);
     const[fetchedCities,setFetchCities]= useState();
     // const[savedCity, setSavedCity]= useLocalStorage("savedCity",defaultCity);
+    const[favoriteCities,setFavoriteCities]= useLocalStorage("favoriteCities",[]);
     const[selectCity,setSelectedCity]=useLocalStorage("savedCity",defaultCity);
     const [temperatureUnit, setTemperatureUnit] =useLocalStorage("temperature","celsius");
     const [windUnit, setWindUnit] = useLocalStorage("wind","kmh");
@@ -235,9 +236,17 @@ export default function Weather(){
             </div>
         )
        }
-    
+    useEffect(()=>{
+        console.log("favoriteCities",favoriteCities)
+    },[favoriteCities])
     function handleCityAdd(city){
-       setSelectedCity(city)
+        setFavoriteCities((prevCities => {
+            if(prevCities.some((c) => c.id === city.id)){
+                return prevCities;
+            }
+            return [...prevCities, city];
+        }));
+        setSelectedCity(city)
 
        
     }
@@ -279,7 +288,7 @@ export default function Weather(){
                 style={{ backgroundImage: `url(${bgImage})` }}
             />
       <main className="min-h-screen pb-24">
-                <Header searching={searching} setSearching={setSearching} newCity={newCity} setNewCity={setNewCity} fetchedCities={fetchedCities} handleCityAdd={handleCityAdd} selectCity={selectCity}/>
+                <Header searching={searching} setSearching={setSearching} newCity={newCity} setNewCity={setNewCity} fetchedCities={fetchedCities} favoriteCities={favoriteCities} setFavoriteCities={setFavoriteCities} handleCityAdd={handleCityAdd} selectCity={selectCity}/>
             {detailsOpen && savedWeather &&(
                 <WeatherDetails  isOpen={detailsOpen} data={savedWeather} closeDetails={closeDetails} selectedDay={selectedDay} getWeatherConditionIcon={getWeatherConditionIcon}/>
             )}
