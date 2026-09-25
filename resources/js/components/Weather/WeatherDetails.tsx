@@ -1,11 +1,11 @@
-import { ArrowLeft, Clock, Gauge, HelpCircle, ShieldAlert, Sunrise, Sunset, X, XCircle } from "lucide-react";
+import { ArrowLeft, Clock, Droplets, Gauge, HelpCircle, ShieldAlert, Sunrise, Sunset, X, XCircle } from "lucide-react";
 import { Glass1 } from "../utils/Morphisim";
 import DetailCard, { WindCard } from "./DetailsCard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Drawer, DrawerOverlay, DrawerPortal } from "@/components/ui/drawer";
 import { DrawerContent } from "../ui/drawer";
 import { Card } from "./WeatherCard";
-
+import { getUvLevel } from "@/utils/functions";
 type WeatherDetailsProp ={
     data:any,
     isOpen:boolean,
@@ -25,12 +25,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
         console.warn(i)
     }
 
-    function getUvLevel(uv:number) {
-    if (uv <= 2) return { label: "Niski", color: "green" };
-    if (uv <= 5) return { label: "Umiarkowany", color: "yellow" };
-    if (uv <= 7) return { label: "Wysoki", color: "orange" };
-    return { label: "Bardzo wysoki", color: "red" };
-    }
+
         return(
             <>
             <Drawer open={isOpen} onOpenChange={(open) => !open && closeDetails()} >
@@ -99,7 +94,13 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                         unit={<span style={{color:getUvLevel(weather?.forecast[selectedDay]?.uv_index).color}}>{getUvLevel(weather?.forecast[selectedDay]?.uv_index).label}</span>}
                         value={weather?.forecast[selectedDay]?.uv_index}
                         />
-                        
+                        <DetailCard
+                        label="Dew Point"
+                        icon={<Droplets size={13}/>}
+                        color="pink"
+                        unit="°C"
+                        value={weather?.forecast?.[selectedDay]?.dewpoint}
+                        />                        
                         
                         
                     </div>

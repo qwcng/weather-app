@@ -60,6 +60,8 @@ class WeatherResource extends JsonResource
                         'wind_speed' => $this['hourly']['wind_speed_10m'][$index],
                         'precipation' =>$this['hourly']['precipitation'][$index],
                         'wind_direction' => $this['hourly']['wind_direction_10m'][$index],
+                        // 'dewpoint' => $this['hourly']['dewpoint_2m_max'][$index],
+                        
                     ];
                 })
                 ->values(),
@@ -80,6 +82,7 @@ class WeatherResource extends JsonResource
                         'wind_speed' => $this['daily']['wind_speed_10m_max'][$index],
                         'pressure' => $this['daily']['pressure_msl_mean'][$index],  
                         'uv_index' => $this['daily']['uv_index_max'][$index],
+                        'dewpoint' => $this['daily']['dewpoint_2m_max'][$index],
                         // 'precipation' =>$this['daily']['precipitation'][$index],
                     ];
                 })

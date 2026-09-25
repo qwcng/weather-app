@@ -18,6 +18,10 @@ import { WeatherDetails } from "@/components/Weather/WeatherDetails";
 import { Toast } from "@/components/Toaster";
 import { usePage } from "@inertiajs/react";
 import { Card } from "@/components/Weather/WeatherCard";
+import { TemperatureBar } from "@/components/Weather/TemperatureBar";
+import { getUvLevel,getWindDirection,getWeatherConditionBackground,getWeatherConditionIcon,getWeatherConditionLabel, formatDuration} from "@/utils/functions";
+// import { MoonComponent } from "@/components/Weather/MoonComponent";
+// import {}
 const defaultCity = {
     id:756135,
     name:"Warszawa",
@@ -54,10 +58,7 @@ export default function Weather(){
             setToast((prev) => ({ ...prev, show: false }));
         }, 4000);
     };
-    function normalize(a,b){
-        return (Math.abs(a - b) <=0.02)
-    }
-    async function saveToVersecDrive() {
+    const saveToVersecDrive = async () => {
     try {
         if(auth?.user == undefined){
             showToast("You must be logged in to save to Versec Drive", "error");
@@ -84,7 +85,7 @@ export default function Weather(){
   }
 }
     useEffect(()=>{
-        async function fetchWeather(){
+        const fetchWeather = async () => {
             
             let url = `/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}&time=${'24h'}`;
             if(temperatureUnit ==="fahrenheit"){
@@ -124,87 +125,23 @@ export default function Weather(){
     },[selectCity,temperatureUnit])
 
     useEffect(()=>{
-
         if(newCity.length>3){
             setTimeout(()=>{
                 axios.get(`/searchCity?city=${newCity}`).then((response)=>{
                     setFetchCities(response.data.results)
                 })
-                
             },500)
         }
     },[newCity])
 
-    function handleCitySubmit(){
-        console.log(`dodano ${newCity}`);
-        
-    }
-    function formatDuration(time:number){
-        const hours = Math.floor(time/3600);
-        const minutes = Math.floor((time%3600)/60);
-        return `${hours}h ${minutes}m`;
-    }
-    function getWeatherConditionIcon(code:number) {
-
-        return weatherMap[code]?.icon || "/weather/cloud.png";
-    };
-    function getWeatherConditionBackground(code:number) {
-
-        if(!weatherMap[code]?.background) return "/weather/background/cloud.jpg";
-        else return weatherMap[code]?.background;
-    };
-    function getWeatherConditionLabel(code:number) {
-
-        return weatherMap[code]?.name || "/weather/cloud.png";
-    };
-    function viewDetails(day){
+    const viewDetails = (day) => {
         setSelectedDay(day);
         setDetailsOpen(true);
-    }
-    function closeDetails(){
+    };
+    const closeDetails = () => {
         setSelectedDay(null);
         setDetailsOpen(false);
-    }
-
-    
-    
-    
-    
-    function TemperatureBar({temperature}){
-        const min = -10;
-        const max = 45;
-        const percent = Math.min(
-                                Math.max(((temperature-min) / (max-min)) * 100, 0),100
-                                );
-
-        return(
-            <div className="relative w-full h-3 rounded-full bg-gray-200 overflow-hidden">
-                <div
-                    className="absolute h-full w-full"
-                    style={{
-                    background: `
-                        linear-gradient(
-                        90deg,
-                        #2563eb 0%,
-                        #06b6d4 20%,
-                        #22c55e 50%,
-                        #facc15 70%,
-                        #ef4444 100%
-                        )
-                    `,
-                    }}
-                />
-
-                <div
-                    className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white  border-black rounded-full"
-                    style={{
-                    left: `${percent}%`,
-                    }}
-                 />
-            </div>
-        )
-
-    }
+    };
     function DailyCard({index}){
 
         const now = new Date();
@@ -261,17 +198,7 @@ export default function Weather(){
       rain: item.precipation,
     };
   }) || []
-  function getWindDirection(degrees:number){
-    if (degrees >= 337.5 || degrees < 22.5) return "N";
-    if (degrees >= 22.5 && degrees < 67.5) return "NE";
-    if (degrees >= 67.5 && degrees < 112.5) return "E";
-    if (degrees >= 112.5 && degrees < 157.5) return "SE";
-    if (degrees >= 157.5 && degrees < 202.5) return "S";
-    if (degrees >= 202.5 && degrees < 247.5) return "SW";
-    if (degrees >= 247.5 && degrees < 292.5) return "W";
-    if (degrees >= 292.5 && degrees < 337.5) return "NW";
-  }
-   
+  
   const bgImage = customTheme === "custom" && customBackground
   ? customBackground
   : weather?.data?.current
@@ -339,12 +266,6 @@ export default function Weather(){
                             return <DailyCard index={index}/>
                             
                         })}
-                        
-
-                        
-                        
-                        
-                        
                     </div>
                 </div>
 
@@ -437,6 +358,21 @@ export default function Weather(){
                 unit="%"
                 value={weather?.data?.forecast?.[0]?.precipitation_probability}
                 />
+               <DetailCard 
+                label="UV Index"
+                icon={<ShieldAlert size={13}/>}
+                color="red"
+                unit={<span style={{color:getUvLevel(weather?.data?.forecast[0]?.uv_index).color}}>{getUvLevel(weather?.data?.forecast[0]?.uv_index).label}</span>}
+                value={weather?.data?.forecast[0]?.uv_index}
+                                       />
+                 <DetailCard
+                label="Dew Point"
+                icon={<Droplets size={13}/>}
+                color="pink"
+                unit="°C"
+                value={weather?.data?.forecast?.[0]?.dewpoint}
+                />
+                {/* <MoonComponent /> */}
                     <Glass1 className="p-2 w-74 h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
                     <CenterRow><button onClick={() => saveToVersecDrive()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Eksportuj do Versec Drive</span><Save className="inline-block"/></button></CenterRow>
                 </Glass1>

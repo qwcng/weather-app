@@ -36,7 +36,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                 className="h-fit w-72 z-50 overflow-hidden rounded-4xl flex-col absolute top-0 origin-top p-4 justify-center items-center bg-gray-600/60 bg-opacity-0 bg-clip-padding backdrop-filter backdrop-blur-xs border-2 border-white/10 shadow-2xl">
                   
                    <button onClick={()=>setSearching(false)} className="flex flex-row"><span className="font-md font-semibold text-white mr-2" >{selectCity.name}</span> <ChevronDown className="text-white"/></button>
-                        <div className="font-md min-h-8 max-h-48 overflow-y-auto w-full flex flex-col  justify-between items-center  font-semibold text-white mr-2">                       
+                        <div className="font-md min-h-8 max-h-48 overflow-y-auto w-full flex flex-col justify-between items-center  font-semibold text-white mr-2">                       
                          {newCity ? (
                             <div className="  z-100 pt-2 flex flex-col w-full gap-2">
                             {fetchedCities 
@@ -82,7 +82,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                             return(
                                                 <>
                                                 <div
-                                                    className="w-full flex flex-row justify-between items-center rounded-2xl border-2 border-white/10 p-2"
+                                                    className=" mt-2 w-full flex flex-row justify-between items-center rounded-2xl border-2 border-white/10 p-2"
                                                 >
                                                     <span
                                                     className="w-[80%] text-white font-semibold text-left text-ellipsis overflow-hidden whitespace-nowrap"
