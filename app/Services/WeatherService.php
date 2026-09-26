@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Http;
 class WeatherService{
     
 
-    public function getWeather(float $latitude = 52.229,float $longitude=21.012, string $temp,string $wind, string $time){
+    public function getWeather(float $latitude = 52.229,float $longitude=21.012, string $temp,string $wind, string $time, string $language): array{
         $response = Http::get(
         "https://api.open-meteo.com/v1/forecast",
         [
             'latitude' => $latitude,
             'longitude' => $longitude,
             'temperature_unit'=>$temp,
+            'language'=>$language,
            
             // if($wind !="kmh"){
             //     'wind_speed_unit'=>$wind,
@@ -70,12 +71,12 @@ class WeatherService{
         return $response->json();
 
     }
-    public function searchCity(string $city){
+    public function searchCity(string $city, string $language){
         $cities= Http::get('https://geocoding-api.open-meteo.com/v1/search',
         [   
             'name'=>$city,
-            'count' => 10,
-            'language' => 'pl',
+                'count' => 10,
+                'language' =>$language,
             'format' => 'json',
         ]);
         return $cities->json();

@@ -1,0 +1,86 @@
+{
+    "LoginRequired": "You must be logged in to save to Versec Drive",
+    "GeneratingReport": "Generating report...",
+    "ReportGenerated": "Report has been generated. Go to Versec Drive to view it",
+    "ReportGenerationFailed": "Failed to generate report",
+    "weather": {
+        "title": "Weather",
+        "selectCity": "Select City",
+        "selectCityPlaceholder": "Enter city name...",
+        "selectCityDescription": "Select a city for which you want to view the weather forecast.",
+        "saveToVersecDrive": "Save to Versec Drive",
+        "saveToVersecDriveDescription": "Save the weather forecast to your Versec Drive account.",
+        "today": "Today",
+        "tomorrow": "Tomorrow"
+    },
+    "WeatherConditions": {
+        "Pressure": "Pressure",
+        "Wind": "Wind",
+        "FeelsLike": "Feels Like",
+        "Humidity": "Humidity",
+        "PrecipitationProbability": "Precipitation",
+        "UVIndex": "UV Index",
+        "DewPoint": "Dew Point",
+        "Sunshine": "Sunshine",
+        "Sunrise": "Sunrise",
+        "Sunset": "Sunset",
+        "Details": "Details",
+        "Temperature": "Temperature",
+        "Weather": "Weather"
+
+    
+    },
+    "Header": {
+        "Search": "Searching",
+        "NoFavoriteCities": "No favorite cities",
+        "EcosystemVersec": "Versec Ecosystem",
+        "VersecWeather": "Versec Weather",
+        "WeatherApp": "Weather Application",
+        "VersecDrive": "Versec Drive",
+        "CloudDrive": "Cloud Drive",
+        "VersecHealth": "Versec Health",
+        "HealthApp": "Health Application",
+        "EnterCityName": "Enter city name",
+        "Map": "Map",
+        "Settings": "Settings",
+        "Weather": "Weather",
+        "Sunny": "Sunny",
+        "MostlySunny": "Mostly Sunny",
+        "PartlyCloudy": "Partly Cloudy",
+        "Cloudy": "Cloudy",
+        "Fog": "Fog",
+        "FreezingFog": "Freezing Fog",
+        "LightDrizzle": "Light Drizzle",
+        "Drizzle": "Drizzle",
+        "HeavyDrizzle": "Heavy Drizzle",
+        "LightRain": "Light Rain",
+        "Rain": "Rain",
+        "HeavyRain": "Heavy Rain",
+        "LightSnow": "Light Snow",
+        "Snow": "Snow",
+        "HeavySnow": "Heavy Snow",
+        "RainShowers": "Rain Showers",
+        "HeavyRainShowers": "Heavy Rain Showers",
+        "Thunderstorm": "Thunderstorm",
+        "ThunderstormWithHail": "Thunderstorm With Hail",
+        "HeavyThunderstormWithHail": "Heavy Thunderstorm With Hail"
+    },
+    "Profile": {
+        "WindUnit": "Wind Unit",
+        "TemperatureUnit": "Temperature Unit",
+        "TimeFormat": "Time Format",
+        "Theme": "Theme",
+        "BackgroundImage": "Background Image",
+        "LoggedInAs": "Logged in as",
+        "LogIn": "Log in",
+        "DefaultTheme": "Default",
+        "CustomTheme": "Custom",
+        "Settings": "Settings",
+        "Refresh": "Refresh"
+    },
+    "Language": {
+       "Language": "Select language"
+    }
+
+
+}

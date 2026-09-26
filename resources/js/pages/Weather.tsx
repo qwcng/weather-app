@@ -20,6 +20,9 @@ import { usePage } from "@inertiajs/react";
 import { Card } from "@/components/Weather/WeatherCard";
 import { TemperatureBar } from "@/components/Weather/TemperatureBar";
 import { getUvLevel,getWindDirection,getWeatherConditionBackground,getWeatherConditionIcon,getWeatherConditionLabel, formatDuration} from "@/utils/functions";
+// import './i18n';
+import { useTranslation } from "react-i18next";
+
 // import { MoonComponent } from "@/components/Weather/MoonComponent";
 // import {}
 const defaultCity = {
@@ -52,6 +55,7 @@ export default function Weather(){
     const [selectedDay, setSelectedDay] = useState(1);
     const [toast, setToast] = useState({ show: false, message: "", type: "success" });
     const { auth } = usePage().props as any;
+    const { t, i18n } = useTranslation();
     const showToast = (message, type = "success") => {
         setToast({ show: true, message, type });
         setTimeout(() => {
@@ -61,10 +65,10 @@ export default function Weather(){
     const saveToVersecDrive = async () => {
     try {
         if(auth?.user == undefined){
-            showToast("You must be logged in to save to Versec Drive", "error");
+            showToast(t("LoginRequired"), "error");
             return;
         }
-        showToast("Generowanie raportu...", "loading");
+        showToast(t("GeneratingReport"), "loading");
         const payload = {
         cityName: selectCity.name,
         adminRegion: selectCity.admin2,
@@ -76,9 +80,9 @@ export default function Weather(){
         };
         const response = await axios.post("/saveToVersecDrive", payload);
         if (response.data?.original?.success || response.data?.success) {
-            showToast("Raport został wygenerowany. Przejdź do Versec Drive, aby wyswietlić", "success");
+            showToast(t("ReportGenerated"), "success");
         } else {
-            showToast("Nie udało się wygenerować raportu", "error");
+            showToast(t("ReportGenerationFailed"), "error");
         }
     } catch(error){
     alert("error");
@@ -87,7 +91,7 @@ export default function Weather(){
     useEffect(()=>{
         const fetchWeather = async () => {
             
-            let url = `/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}&time=${'24h'}`;
+            let url = `/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}&time=${'24h'}&lang=${i18n.language}`;
             if(temperatureUnit ==="fahrenheit"){
                 url+=`&temp=${temperatureUnit}`
                 // `/getWeather?latitude=${selectCity.latitude}&longitude=${selectCity.longitude}&temp=${temperatureUnit}&time=${timeFormat}`);
@@ -127,7 +131,7 @@ export default function Weather(){
     useEffect(()=>{
         if(newCity.length>3){
             setTimeout(()=>{
-                axios.get(`/searchCity?city=${newCity}`).then((response)=>{
+                axios.get(`/searchCity?city=${newCity}&lang=${i18n.language}`).then((response)=>{
                     setFetchCities(response.data.results)
                 })
             },500)
@@ -150,13 +154,13 @@ export default function Weather(){
         const result =Math.round((target-today)/ 86400000);
         let day;
         if(result==0){
-            day="Dzisiaj"
+            day=t("weather.today")
         }
         if(result==1){
-            day="Jutro"
+            day=t("weather.tomorrow")
         }
         if(result>=2){
-            day=target.toLocaleDateString("pl-PL",{
+            day=target.toLocaleDateString(i18n.language,{
                 weekday:"short"
             })
         }
@@ -228,20 +232,19 @@ export default function Weather(){
                 } alt="" className="h-48" />
                     <h1 className="text-6xl font-extrabold text-white ">{weather?.data.current.temperature || <LoaderCircle className="animate-spin"size={40}/>}{weather?.data?.current.temperature_unit}</h1>
                     <span className="text-white">{weather?.data.current
-                    ? getWeatherConditionLabel(weather?.data.current.weather_code)
+                    ? t(getWeatherConditionLabel(weather?.data.current.weather_code))
                     :"..."}</span>  
                  <div className="w-full flex flex-row justify-center items-center gap-14  text-white my-4 font-semibold text-md">
                      <span className=" flex flex-row justify-center items-center"> <Wind className="mr-3"/>{weather?.data.current.wind.speed || <LoaderCircle className="animate-spin"size={12}/>}km/h</span>
                      <span className=" flex flex-row justify-center items-center"> <Droplet className="mr-3"/>{weather?.data.current.humidity || <LoaderCircle className="animate-spin"size={12}/>}%</span>
                      <span className=" flex flex-row justify-center items-center"> <Sun className="mr-3"/>{formatDuration(weather?.data.today.daylight_duration) || <LoaderCircle className="animate-spin"size={12}/>}</span>
-     
                  </div>                 
             </CenterAll>
         
             <Glass1 className="w-[95vw] mx-auto rounded-2xl">
               <div className="w-full h-fit p-2 overflow-x-hidden">
                     <span className=" flex flex-row text-gray-200 pb-1 border-b-1 border-gray-600  font-semibold  "><Clock4 className="mr-1.5"/> Hourly Forecast</span>
-                            {/* chart */}
+
                     <div className="w-full p-2  flex  gap-4 overflow-auto">
                         
                         {weather?.data.hourly.map((data,index)=>{
@@ -259,14 +262,13 @@ export default function Weather(){
             <Glass1 className="mt-5 w-[95vw] mx-auto rounded-2xl">
                 <div className="w-full h-fit  p-2  overflow-x-hidden">
                     <span className=" flex flex-row text-gray-200 font-semibold pb-1 border-b-1 border-gray-600 "><Calendar1 size={20} className="mr-1.5"/> 10-day forecast</span>
-                            {/* chart */}
                     <div className="w-full h-64   p-2  flex  flex-col gap-4 overflow-y-auto">
                         {weather?.data.forecast.map((hour,index)=>{
-                            // console.log(index)
                             return <DailyCard index={index}/>
                             
                         })}
                     </div>
+
                 </div>
 
             </Glass1>
@@ -331,42 +333,42 @@ export default function Weather(){
             </Glass1>
             <div className="w-[95vw] grid grid-cols-2 gap-3 my-4 mx-auto" >
                 <DetailCard 
-                label="Pressure"
+                label={t("WeatherConditions.Pressure")}
                 icon={<Gauge size={13}/>}
                 color="indigo"
                 unit="hPa"
                 value={weather?.data.current.pressure}
                 />
                 <DetailCard 
-                label="Wind"
+                label={t("WeatherConditions.Wind")}
                 icon={<Wind size={13}/>}
                 color="yellow"
                 unit={getWindDirection(weather?.data.current.wind.direction)}
                 value={weather?.data.current.wind.direction }
                 />
                 <DetailCard
-                label="Feels like"
+                label={t("WeatherConditions.FeelsLike")}
                 icon={<Thermometer size={13}/>}
                 color="red"
                 unit="°C"
                 value={weather?.data?.current?.feels_like}
                 />
                 <DetailCard
-                label="Rain"
+                label={t("WeatherConditions.PrecipitationProbability")}
                 icon={<CloudRain size={13}/>}
                 color="blue"
                 unit="%"
                 value={weather?.data?.forecast?.[0]?.precipitation_probability}
                 />
                <DetailCard 
-                label="UV Index"
+                label={t("WeatherConditions.UVIndex")}
                 icon={<ShieldAlert size={13}/>}
                 color="red"
                 unit={<span style={{color:getUvLevel(weather?.data?.forecast[0]?.uv_index).color}}>{getUvLevel(weather?.data?.forecast[0]?.uv_index).label}</span>}
                 value={weather?.data?.forecast[0]?.uv_index}
                                        />
                  <DetailCard
-                label="Dew Point"
+                label={t("WeatherConditions.DewPoint")}
                 icon={<Droplets size={13}/>}
                 color="pink"
                 unit="°C"
@@ -374,7 +376,7 @@ export default function Weather(){
                 />
                 {/* <MoonComponent /> */}
                     <Glass1 className="p-2 w-74 h-12 rounded-4xl border-2 border-white/10  bg-brown-900/10 backdrop-blur-[3px] font-semibold">
-                    <CenterRow><button onClick={() => saveToVersecDrive()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>Eksportuj do Versec Drive</span><Save className="inline-block"/></button></CenterRow>
+                    <CenterRow><button onClick={() => saveToVersecDrive()} className="flex flex-row items-center justify-center gap-2  text-center mx-auto"><span>{t("SaveToVersecDrive")}</span><Save className="inline-block"/></button></CenterRow>
                 </Glass1>
             </div>
         </main>

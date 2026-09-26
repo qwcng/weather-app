@@ -29,8 +29,9 @@ class WeatherController extends Controller
           $temp =$request->input('temp','celsius');
           $wind =$request->input('wind',"kmh");
           $time=$request->input('time');
+          $language=$request->input('lang','en');
         }
-        $weather = $this->weatherService->getWeather($latitude,$longitude,$temp,$wind,$time);
+        $weather = $this->weatherService->getWeather($latitude,$longitude,$temp,$wind,$time,$language);
         return new WeatherResource($weather);
     }
     public function searchCity(Request $request){
@@ -40,7 +41,8 @@ class WeatherController extends Controller
             ]
             );
         $city = $request->input('city');
-        return $this->weatherService->searchCity($city);
+        $language=$request->input('lang','en');
+        return $this->weatherService->searchCity($city, $language);
 
     
     }

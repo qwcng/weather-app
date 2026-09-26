@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { route as routeFn } from 'ziggy-js';
 import { initializeTheme } from './hooks/use-appearance';
 import { registerSW } from 'virtual:pwa-register'
-
+import './i18n';
 declare global {
     const route: typeof routeFn;
 }

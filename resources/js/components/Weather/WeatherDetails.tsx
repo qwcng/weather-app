@@ -6,6 +6,7 @@ import { Drawer, DrawerOverlay, DrawerPortal } from "@/components/ui/drawer";
 import { DrawerContent } from "../ui/drawer";
 import { Card } from "./WeatherCard";
 import { getUvLevel } from "@/utils/functions";
+import { useTranslation } from "react-i18next";
 type WeatherDetailsProp ={
     data:any,
     isOpen:boolean,
@@ -19,6 +20,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
     const[windUnit,setWindUnit]= useLocalStorage('wind_unit','km/h  ')
     const weather = data?.data?.data;
     const weatherDate = new Date(weather?.forecast[0]?.date)
+    const {t,i18n} = useTranslation();
     // console.log(24*1 + 23)
     for(let i=24*selectedDay; i<=24*selectedDay + 23; i++){
         console.log(weather.hourly[i].time)
@@ -41,7 +43,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                     <X className="text-white"/>
                 </button>
                 <button  className="h-12 w-fit rounded-4xl  flex items-center justify-center  border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
-                     <span>{weatherDate.toLocaleDateString('pl-PL', {
+                     <span>{weatherDate.toLocaleDateString(i18n.language, {
                             weekday: 'long',
                             day: 'numeric',
                             month: 'long',
@@ -54,11 +56,11 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                  </div>
                 <div className="font-bold p-2 w-full min-w-0">
                     <h1 className="text-2xl">
-                        Weather Details
+                        {t("WeatherConditions.Details")}
                     </h1>
                     <div className="w-full grid grid-cols-2 gap-3 my-4 mx-auto" >
                         <DetailCard
-                        label="Sunrise"
+                        label={t("WeatherConditions.Sunrise")}
                         color="orange"
                         value={new Date(weather.forecast[selectedDay].sunrise).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
                         unit="h"
@@ -66,7 +68,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
 
                         />
                         <DetailCard
-                        label="Sunset"
+                        label={t("WeatherConditions.Sunset")}
                         color="orange"
                         value={ new Date(weather.forecast[selectedDay].sunset).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
                         unit="h"
@@ -74,28 +76,28 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
 
                         />
                         <DetailCard
-                        label="Sunshine"
+                        label={t("WeatherConditions.Sunshine")}
                         value={(weather.forecast[selectedDay].daylight_duration / 3600).toFixed(2)}
                         unit="h"
                         color="amber"
                         icon={<Clock size={13} />}
                         />
                         <DetailCard 
-                        label="Pressure"
+                        label={t("WeatherConditions.Pressure")}
                         icon={<Gauge size={13}/>}
                         color="indigo"
                         unit="hPa"
                         value={weather.forecast[selectedDay].pressure}
                         />
                         <DetailCard 
-                        label="UV Index"
+                        label={t("WeatherConditions.UVIndex")}
                         icon={<ShieldAlert size={13}/>}
                         color="red"
                         unit={<span style={{color:getUvLevel(weather?.forecast[selectedDay]?.uv_index).color}}>{getUvLevel(weather?.forecast[selectedDay]?.uv_index).label}</span>}
                         value={weather?.forecast[selectedDay]?.uv_index}
                         />
                         <DetailCard
-                        label="Dew Point"
+                        label={t("WeatherConditions.DewPoint")}
                         icon={<Droplets size={13}/>}
                         color="pink"
                         unit="°C"
@@ -104,7 +106,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                         
                         
                     </div>
-                    <h1 className="text-xl">Temperature</h1>
+                    <h1 className="text-xl">{t("WeatherConditions.Temperature")}</h1>
                     <div className="w-full min-w-0 p-4  flex  gap-4 overflow-x-auto">
                     {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
                             .map((hour:number, index:number) => {
@@ -114,7 +116,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                                 );
                             })}
                     </div>
-                    <h1 className="text-xl">Wind</h1>
+                    <h1 className="text-xl">{t("WeatherConditions.Wind")}</h1>
                     <div className="w-full min-w-0 max-w-full p-2  flex  gap-4 overflow-x-auto">
                     {weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24)
                             .map((hour:number, index:number) => {

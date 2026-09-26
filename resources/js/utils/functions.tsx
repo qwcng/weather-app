@@ -1,4 +1,7 @@
 import { weatherMap } from "@/utils/WeatherConditions";
+import { useTranslation } from "react-i18next";
+// import { useTransition, } from "react";
+// const {t,i18n} = useTranslation();
 export const getUvLevel = (uv:number) => {
     if (uv <= 2) return { label: "Niski", color: "green" };
     if (uv <= 5) return { label: "Umiarkowany", color: "yellow" };

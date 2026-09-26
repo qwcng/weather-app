@@ -3,6 +3,7 @@ import { ArrowLeft, ChevronDown, LayoutGrid, Plus, Sidebar, X } from "lucide-rea
 import { CenterRow, CenterX } from "../utils/Center"
 import { useState } from "react";
 import { Glass1 } from "../utils/Morphisim";
+import { useTranslation } from "react-i18next";
 
 type Header={
     searching: boolean;
@@ -22,6 +23,7 @@ type Header={
 
 export function Header({searching,setSearching,newCity,setNewCity,fetchedCities, favoriteCities,setFavoriteCities, handleCityAdd, selectCity}: Header){
     const [appsOpen, setAppsOpen] = useState(false);
+    const {t,i18n} = useTranslation();
     return(
     <div className=" relative p-5 flex flex-row w-full align-center justify-evenly ">
                 <button  className="h-12 w-12 rounded-4xl  flex items-center justify-center gap-12 border-white/10 border-2 p-1 bg-black/10 backdrop-blur-[3px] font-semibold ">
@@ -67,7 +69,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                 :
                                 ( 
                                 <>
-                                    <span>wyszukiwanie</span>
+                                    <span>{t("Header.Search")}</span>
                                 </>
                                 )}
                                 
@@ -107,7 +109,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                 )
                                 :
                                 (
-                                    <span>Brak ulubionych miejscowości</span>
+                                    <span>{t("Header.NoFavoriteCities")}</span>
                                 )
                                 }
                                 </>
@@ -122,7 +124,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                     
                     <CenterRow>
                             <div className="bottom-0 flex flex-row items-center justify-center relative w-full">
-                                <input type="text"  className="rounded-2xl border-2 border-white/10 p-2 bg-black/10 backdrop-blur-[3px] font-semibold overflow-hidden" placeholder="Wpisz nazwę miejscowości" value={newCity} onChange={(e) => setNewCity(e.target.value)} />
+                                <input type="text"  className="rounded-2xl border-2 border-white/10 p-2 bg-black/10 backdrop-blur-[3px] font-semibold overflow-hidden" placeholder={t("Header.EnterCityName")} value={newCity} onChange={(e) => setNewCity(e.target.value)} />
                                 {newCity && (
                                     <X className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-white" onClick={() => setNewCity("")} />
                                 )}
@@ -172,7 +174,7 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                 className="flex flex-col gap-3"
                             >
                                 <div className="flex items-center justify-between pb-1 border-b border-white/10">
-                                    <span className="font-semibold text-sm text-white pl-1">Ekosystem Versec</span>
+                                    <span className="font-semibold text-sm text-white pl-1">{t("Header.EcosystemVersec")}</span>
                                     <button
                                         onClick={() => setAppsOpen(false)}
                                         className="p-1 rounded-full hover:bg-white/10 text-white transition-colors"
@@ -188,8 +190,8 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                     >
                                         <img src="icons/icon-192.jpg" alt="Aplikacja 1" className="w-9 h-9 rounded-xl object-cover border border-white/10" />
                                         <div className="flex flex-col">
-                                            <span className="font-semibold text-sm leading-tight">Versec Weather</span>
-                                            <span className="text-xs text-white/60">Aplikacja pogodowa</span>
+                                            <span className="font-semibold text-sm leading-tight">{t("Header.VersecWeather")}</span>
+                                            <span className="text-xs text-white/60">{t("Header.WeatherApp")}</span>
                                         </div>
                                     </a>
 
@@ -199,8 +201,8 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                     >
                                         <img src="icons/versec192.jpg" alt="Aplikacja 2" className="w-9 h-9 rounded-xl object-cover border border-white/10" />
                                         <div className="flex flex-col">
-                                            <span className="font-semibold text-sm leading-tight">Versec Drive</span>
-                                            <span className="text-xs text-white/60">Dysk w chmurze</span>
+                                            <span className="font-semibold text-sm leading-tight">{t("Header.VersecDrive")}</span>
+                                            <span className="text-xs text-white/60">{t("Header.CloudDrive")}</span>
                                         </div>
                                     </a>
                                      <a
@@ -209,8 +211,8 @@ export function Header({searching,setSearching,newCity,setNewCity,fetchedCities,
                                     >
                                         <img src="icons/versechealth.png" alt="Aplikacja 2" className="w-9 h-9 rounded-xl object-cover border border-white/10" />
                                         <div className="flex flex-col">
-                                            <span className="font-semibold text-sm leading-tight">Versec Health</span>
-                                            <span className="text-xs text-white/60">Aplikacja zdrowia</span>
+                                            <span className="font-semibold text-sm leading-tight">{t("Header.VersecHealth")}</span>
+                                            <span className="text-xs text-white/60">{t("Header.HealthApp")}</span>
                                         </div>
                                     </a>
                                 </div>

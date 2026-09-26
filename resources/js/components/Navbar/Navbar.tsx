@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapIcon, Settings, Sun } from "lucide-react";
 import { Glass1 } from "../utils/Morphisim";
+import { useTranslation } from "react-i18next";
 
 
 
@@ -10,7 +11,7 @@ type Props ={
     setActive: (value:string)=>void,
 }
 export function Navbar({active,setActive}: Props) {
-    
+    const {t,i18n} = useTranslation();
 
     return (
         <div className="fixed bottom-4 w-full z-50">
@@ -32,7 +33,7 @@ export function Navbar({active,setActive}: Props) {
 
                         <div className="relative z-10 flex flex-col items-center text-white">
                             <Sun size={30} />
-                            <span className="text-xs">Pogoda</span>
+                            <span className="text-xs">{t("Header.Weather")}</span>
                         </div>
                     </button>
 
@@ -50,7 +51,7 @@ export function Navbar({active,setActive}: Props) {
 
                         <div className="relative z-10 flex flex-col items-center text-white">
                             <MapIcon size={30} />
-                            <span className="text-xs">Mapa</span>
+                            <span className="text-xs">{t("Header.Map")}</span>
                         </div>
                     </button>
 
@@ -69,7 +70,7 @@ export function Navbar({active,setActive}: Props) {
 
                         <div className="relative z-10 flex flex-col items-center text-white">
                             <Settings size={30} />
-                            <span className="text-xs">Ustawienia</span>
+                            <span className="text-xs">{t("Header.Settings")}</span>
                         </div>
                     </button>
 
