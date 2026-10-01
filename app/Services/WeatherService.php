@@ -38,7 +38,7 @@ class WeatherService{
 
             'hourly' => implode(',', [
                 'temperature_2m',
-                'relative_humidity_2m',
+                'relative_humidity_2m'  ,
                 'weather_code',
                 'precipitation_probability',
                 'precipitation',
@@ -60,6 +60,7 @@ class WeatherService{
                 'uv_index_max',
                 'pressure_msl_mean',
                 'dewpoint_2m_max',
+                
                 
             ]),
 

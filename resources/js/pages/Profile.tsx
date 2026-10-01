@@ -231,7 +231,7 @@ export default function Profile(){
                             </CenterRow>
                         </Glass1>
                     ) : (
-                        <Glass1 className="p-2 w-[35%] h-12 rounded-4xl border-2 border-white/10 bg-brown-900/10 backdrop-blur-[3px] font-semibold">
+                        <Glass1 className="p-2 w-fit h-12 rounded-4xl border-2 border-white/10 bg-brown-900/10 backdrop-blur-[3px] font-semibold">
                             <CenterRow><button onClick={() =>{
                             showToast("Logging in...", "loading");
                             window.location.href = "/login"}

@@ -26,6 +26,8 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
         console.log(weather.hourly[i].time)
         console.warn(i)
     }
+    const hours = weather?.hourly?.slice(24 * selectedDay, 24 * selectedDay + 24);
+    const humidity = Math.round(hours.reduce((sum, hour) => sum + hour.humidity, 0) / hours.length);
 
 
         return(
@@ -34,7 +36,6 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
             <DrawerPortal>
                 <DrawerOverlay className="bg-transparent"/>
                 <DrawerContent className="!bg-transparent border-none shadow-none p-0 max-w-full max-h-[90vh] overflow-hidden">
-                
              <Glass1 className="w-full max-w-full border-white/15 rounded-2xl flex flex-col justify-between items-center p-2.5 bg-white/10 text-white backdrop-blur-md shadow-md  hover:bg-white/15 transition-all overflow-y-auto overflow-x-hidden">
               <div className=" text-white relative p-5 flex flex-row w-full align-center justify-evenly ">
                 <button 
@@ -62,7 +63,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                         <DetailCard
                         label={t("WeatherConditions.Sunrise")}
                         color="orange"
-                        value={new Date(weather.forecast[selectedDay].sunrise).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
+                        value={new Date(weather.forecast[selectedDay].sunrise).toLocaleTimeString(i18n.language,{hour:'2-digit', minute:'2-digit'})}
                         unit="h"
                         icon={<Sunrise size={13}/>}
 
@@ -70,7 +71,7 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                         <DetailCard
                         label={t("WeatherConditions.Sunset")}
                         color="orange"
-                        value={ new Date(weather.forecast[selectedDay].sunset).toLocaleTimeString('pl-PL',{hour:'2-digit', minute:'2-digit'})}
+                        value={ new Date(weather.forecast[selectedDay].sunset).toLocaleTimeString(i18n.language,{hour:'2-digit', minute:'2-digit'})}
                         unit="h"
                         icon={<Sunset size={13}/>}
 
@@ -102,7 +103,14 @@ export function WeatherDetails({data,isOpen,closeDetails, selectedDay,getWeather
                         color="pink"
                         unit="°C"
                         value={weather?.forecast?.[selectedDay]?.dewpoint}
-                        />                        
+                        />        
+                       <DetailCard
+                        label={t("WeatherConditions.Humidity")}
+                        icon={<Droplets size={13}/>}
+                        color="blue"
+                        unit="%"
+                        value={humidity}
+                        />              
                         
                         
                     </div>
